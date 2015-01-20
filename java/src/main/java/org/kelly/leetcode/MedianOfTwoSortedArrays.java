@@ -29,13 +29,11 @@ public class MedianOfTwoSortedArrays {
         List<Integer> mergedArray = new ArrayList<Integer>();
         mergedArray.addAll(sortedArray1);
         mergedArray.addAll(sortedArray2);
-        Comparator<Integer> comparator = new Comparator<Integer>() {
-
+        mergedArray.sort(new Comparator<Integer>() {
             public int compare(Integer number1, Integer number2) {
                 return number1.compareTo(number2);
             }
-        };        
-        mergedArray.sort(comparator);
+        });
         
         return getMedian(mergedArray);
     }
@@ -90,11 +88,15 @@ public class MedianOfTwoSortedArrays {
             return resultMedian;
         }
         
-        if(sortedArrayLeft.size() == 1) {
-            /*
-             *  the sortedArrayRight.size must greater than or equals to 3
-             *  or else, the medianLeft would be equal to medianRight
-             */
+        if(sortedArrayLeft.size() == 1 && sortedArrayRight.size() == 1) {
+            DoubleMedian resultMedian = new DoubleMedian();
+            resultMedian.value1 = Math.min(medianLeft.value, medianRight.value);
+            resultMedian.value2 = Math.max(medianLeft.value, medianRight.value);
+
+            return resultMedian;
+        }
+
+        if(sortedArrayLeft.size() == 1) { // here, the sortedArrayRight.size must be >= 3
             int valueOfMedianLeft = sortedArrayLeft.get(0);
             
             int valueBelowMedianRight = sortedArrayRight.get(medianRight.index - 1);
@@ -229,16 +231,62 @@ public class MedianOfTwoSortedArrays {
     }
     
     private Median getMedian(List<Integer> sortedArrayLeft, List<Integer> sortedArrayRight, DoubleMedian medianLeft, DoubleMedian medianRight) {
-        if(medianLeft.equals(medianRight)) {
+        int valueBelowMedianLeft = medianLeft.value1;
+        int valueAboveMedianLeft = medianLeft.value2;
+        int valueBelowMedianRight = medianRight.value1;
+        int valueAboveMedianRight = medianRight.value2;
+
+        if((!(valueAboveMedianLeft <= valueBelowMedianRight) && !(valueBelowMedianLeft >= valueAboveMedianRight))
+             || (sortedArrayLeft.size() == 2 && sortedArrayRight.size() == 2)) {
+            List<Integer> tmpList = new ArrayList<Integer>();
+            tmpList.add(valueBelowMedianLeft);
+            tmpList.add(valueAboveMedianLeft);
+            tmpList.add(valueBelowMedianRight);
+            tmpList.add(valueAboveMedianRight);
+
+            tmpList.sort(new Comparator<Integer>() {
+                public int compare(Integer number1, Integer number2) {
+                    return number1.compareTo(number2);
+                }
+            });
+
             DoubleMedian resultMedian = new DoubleMedian();
-            resultMedian.value1 = medianLeft.value1;
-            resultMedian.value2 = medianLeft.value2;
-            
+            resultMedian.value1 = tmpList.get(1);
+            resultMedian.value2 = tmpList.get(2);
+
             return resultMedian;
         }
         
-        // to be implemented
-        return null;
+
+        if(sortedArrayLeft.size() == 2) { // it must be case that sortedArrayRight.size >= 4
+            if(valueAboveMedianLeft <= valueBelowMedianRight) {
+                DoubleMedian resultMedian = new DoubleMedian();
+                resultMedian.value1 = Math.max(valueAboveMedianLeft, sortedArrayRight.get(medianRight.index1 - 1));
+                resultMedian.value2 = valueBelowMedianRight;
+
+                return resultMedian;
+            }
+            else { // it must be case that valueBelowMedianLeft >= valueAboveMedianRight
+                DoubleMedian resultMedian = new DoubleMedian();
+                resultMedian.value1 = valueAboveMedianRight;
+                resultMedian.value2 = Math.min(valueBelowMedianLeft, sortedArrayRight.get(medianRight.index2 + 1));
+
+                return resultMedian;
+            }
+        }
+        
+        if(valueAboveMedianLeft <= valueBelowMedianRight) {
+            List<Integer> childSortedArrayLeft = sortedArrayLeft.subList(medianLeft.index2, sortedArrayLeft.size() - 1);
+            List<Integer> childSortedArrayRight = sortedArrayRight.subList(0, sortedArrayRight.size() - medianLeft.index2);
+
+            return getMedian(childSortedArrayLeft, childSortedArrayRight);
+        }
+        else { // it must be case that valueBelowMedianLeft >= valueAboveMedianRight
+            List<Integer> childSortedArrayLeft = sortedArrayLeft.subList(0, medianLeft.index1);
+            List<Integer> childSortedArrayRight = sortedArrayLeft.subList(sortedArrayLeft.size() - medianLeft.index2, sortedArrayRight.size() - 1);
+
+            return getMedian(childSortedArrayLeft, childSortedArrayRight);
+        }
     }
     
     private void assertInput(List<Integer> sortedArray1, List<Integer> sortedArray2) {
