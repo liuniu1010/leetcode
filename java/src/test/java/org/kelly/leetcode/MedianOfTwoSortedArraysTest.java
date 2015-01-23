@@ -2,6 +2,7 @@ package org.kelly.leetcode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -34,23 +35,35 @@ public class MedianOfTwoSortedArraysTest
     public void testQuickSolution()
     {
         List<Integer> array1 = new ArrayList<Integer>();
-        array1.add(1);
-        array1.add(2);
-        array1.add(3);
-        array1.add(4);
-        array1.add(5);
-        array1.add(6);
-        array1.add(7);
+        int number = 1;
+        Random random = new Random();
+        while(number < 1000000) {
+            number = number + random.nextInt(10);
+            array1.add(number);
+        }
 
         List<Integer> array2 = new ArrayList<Integer>();
-        array2.add(3);
-        array2.add(4);
-        array2.add(5);
-        array2.add(6);
-        array2.add(7);
-//        array2.add(8);
+        number = 2;
+        while(number < 1000000) {
+            number = number + random.nextInt(11);
+            array2.add(number);
+        }
         
-        Median median = MedianOfTwoSortedArrays.getInstance().getMedianWithQuickSolution(array1, array2);
-        System.out.println("median = " + median);
+        long beginMillis = System.currentTimeMillis();
+        Median medianOfSimple = MedianOfTwoSortedArrays.getInstance().getMedianWithSimpleSolution(array1, array2);
+        long consumeMillisOfSimple = System.currentTimeMillis() - beginMillis;
+        
+        beginMillis = System.currentTimeMillis();
+        Median medianOfQuick = MedianOfTwoSortedArrays.getInstance().getMedianWithQuickSolution(array1, array2);
+        long consumeMillisOfQuick = System.currentTimeMillis() - beginMillis;
+        System.out.println("medianSimple = " + medianOfSimple + ", consumeMillis = " + consumeMillisOfSimple);
+        System.out.println("medianQuick = " + medianOfQuick + ", consumeMillis = " + consumeMillisOfQuick);
+        
+        if(medianOfSimple.equals(medianOfQuick)) {
+            System.out.println("median of two sorted arrays test passed");
+        }
+        else {
+            throw new RuntimeException("median of two sorted arrays test failed!");
+        }
     }
 }

@@ -249,7 +249,7 @@ public class MedianOfTwoSortedArrays {
         }
         else { // it must be case that valueBelowMedianLeft >= valueAboveMedianRight
             List<Integer> childSortedArrayLeft = sortedArrayLeft.subList(0, medianLeft.index1 + 1);
-            List<Integer> childSortedArrayRight = sortedArrayLeft.subList(medianLeft.index2, sortedArrayRight.size());
+            List<Integer> childSortedArrayRight = sortedArrayRight.subList(medianLeft.index2, sortedArrayRight.size());
 
             return getMedian(childSortedArrayLeft, childSortedArrayRight);
         }
