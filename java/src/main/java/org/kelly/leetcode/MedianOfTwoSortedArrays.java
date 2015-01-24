@@ -106,13 +106,13 @@ public class MedianOfTwoSortedArrays {
         if(sortedArrayLeft.size() == 1) { // here, the sortedArrayRight.size must be >= 3
             int valueBelowMedianRight = sortedArrayRight.get(medianRight.index - 1);
             int valueAboveMedianRight = sortedArrayRight.get(medianRight.index + 1);
-            List<Integer> fixSizedList = new ArrayList<Integer>(); // we will sort this list with size = 4
-            fixSizedList.add(valueOfMedianLeft);
-            fixSizedList.add(valueBelowMedianRight);
-            fixSizedList.add(valueOfMedianRight);
-            fixSizedList.add(valueAboveMedianRight);
+            List<Integer> limitSizedList = new ArrayList<Integer>(); // we will sort this list with size = 4
+            limitSizedList.add(valueOfMedianLeft);
+            limitSizedList.add(valueBelowMedianRight);
+            limitSizedList.add(valueOfMedianRight);
+            limitSizedList.add(valueAboveMedianRight);
 
-            return getMedianWithUnsortedArray(fixSizedList);
+            return getMedianWithUnsortedArray(limitSizedList);
         }
        
         // sortedArrayLeft.size >= 3 
@@ -143,12 +143,12 @@ public class MedianOfTwoSortedArrays {
         }
          
         if(sortedArrayLeft.size() == 1) {
-            List<Integer> fixSizedList = new ArrayList<Integer>(); // we will sort the list with size = 3
-            fixSizedList.add(valueOfMedianLeft);
-            fixSizedList.add(valueBelowMedianRight);
-            fixSizedList.add(valueAboveMedianRight);
+            List<Integer> limitSizedList = new ArrayList<Integer>(); // we will sort the list with size = 3
+            limitSizedList.add(valueOfMedianLeft);
+            limitSizedList.add(valueBelowMedianRight);
+            limitSizedList.add(valueAboveMedianRight);
 
-            return getMedianWithUnsortedArray(fixSizedList);
+            return getMedianWithUnsortedArray(limitSizedList);
         }
 
         if(valueOfMedianLeft < valueBelowMedianRight) {
@@ -182,14 +182,14 @@ public class MedianOfTwoSortedArrays {
         }
 
         if(sortedArrayLeft.size() == 2) {
-            List<Integer> fixSizedList = new ArrayList<Integer>();  // we will sort the list with size = 5
-            fixSizedList.add(valueBelowMedianLeft);
-            fixSizedList.add(valueAboveMedianLeft);
-            fixSizedList.add(valueBelowMedianRight);
-            fixSizedList.add(valueOfMedianRight);
-            fixSizedList.add(valueAboveMedianRight);
+            List<Integer> limitSizedList = new ArrayList<Integer>();  // we will sort the list with size = 5
+            limitSizedList.add(valueBelowMedianLeft);
+            limitSizedList.add(valueAboveMedianLeft);
+            limitSizedList.add(valueBelowMedianRight);
+            limitSizedList.add(valueOfMedianRight);
+            limitSizedList.add(valueAboveMedianRight);
 
-            return getMedianWithUnsortedArray(fixSizedList);
+            return getMedianWithUnsortedArray(limitSizedList);
         }
 
         if(valueAboveMedianLeft < valueOfMedianRight) {
@@ -214,13 +214,13 @@ public class MedianOfTwoSortedArrays {
 
         if((!(valueAboveMedianLeft <= valueBelowMedianRight) && !(valueBelowMedianLeft >= valueAboveMedianRight))
              || (sortedArrayLeft.size() == 2 && sortedArrayRight.size() == 2)) {
-            List<Integer> fixSizedList = new ArrayList<Integer>(); // we will sort this list with size = 4
-            fixSizedList.add(valueBelowMedianLeft);
-            fixSizedList.add(valueAboveMedianLeft);
-            fixSizedList.add(valueBelowMedianRight);
-            fixSizedList.add(valueAboveMedianRight);
+            List<Integer> limitSizedList = new ArrayList<Integer>(); // we will sort this list with size = 4
+            limitSizedList.add(valueBelowMedianLeft);
+            limitSizedList.add(valueAboveMedianLeft);
+            limitSizedList.add(valueBelowMedianRight);
+            limitSizedList.add(valueAboveMedianRight);
 
-            return getMedianWithUnsortedArray(fixSizedList);
+            return getMedianWithUnsortedArray(limitSizedList);
         }
         
 
@@ -293,7 +293,7 @@ public class MedianOfTwoSortedArrays {
 
     /*
      * this method use sort. it means that the runing time should be O(size*log(size))
-     * but for the quick solution method. it only use this method for fixed size such as 3,4 or 5.
+     * but for the quick solution method. it only use this method for limit sized such as 3,4 or 5.
      */
     private Median getMedianWithUnsortedArray(List<Integer> array) {
         array.sort(new Comparator<Integer>() {
