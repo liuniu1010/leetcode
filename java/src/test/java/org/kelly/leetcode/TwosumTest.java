@@ -48,5 +48,10 @@ public class TwosumTest
         } else {
             System.out.println("cannot find the two indexes!");
         }
+        
+        assertEquals(result.index1, 0);
+        assertEquals(result.index2, 3);
+        
+        System.out.println("test Twosum passed!");
     }
 }

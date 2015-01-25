@@ -28,30 +28,30 @@ public class LengthOfLongestUnrepeatSubstring {
         int maxEndIndex = 0;
         int currentBeginIndex = 0;
         for(int index = 0;index < origString.length();index++) {
-            String curChar = String.valueOf(origString.charAt(index));
+            String curChar = origString.substring(index, index + 1);
             if(indexCache.containsKey(curChar)) {
                 /* find the possible repeated char, but we should check index value to make
                  * sure that the index is before or after currentBeginIndex
                  */
                 int repeatIndex = indexCache.get(curChar);
                 if(repeatIndex < currentBeginIndex) {
-                    String currentSubstring = origString.substring(currentBeginIndex, index);
-                    if(currentSubstring.length() >= maxSubstring.length()) {
+                    String currentSubstring = origString.substring(currentBeginIndex, index + 1);
+                    if(currentSubstring.length() > maxSubstring.length()) {
                         maxSubstring = currentSubstring;
                         maxBeginIndex = currentBeginIndex;
-                        maxEndIndex = index;
+                        maxEndIndex = index + 1;
                     }
                 } 
                 else {
-                    currentBeginIndex = index;
+                    currentBeginIndex = repeatIndex + 1;
                 }
             } 
             else { // 
-                String currentSubstring = origString.substring(currentBeginIndex, index);
-                if(currentSubstring.length() >= maxSubstring.length()) {
+                String currentSubstring = origString.substring(currentBeginIndex, index + 1);
+                if(currentSubstring.length() > maxSubstring.length()) {
                     maxSubstring = currentSubstring;
                     maxBeginIndex = currentBeginIndex;
-                    maxEndIndex = index;
+                    maxEndIndex = index + 1;
                 }
             }
 

@@ -25,6 +25,13 @@ public class LengthOfLongestUnrepeatSubstringTest
     }
     
     public void testLengthOfSubstring() {
-        // to be implemented
+        String origString = "abejklmnpqbbbdefgbbbab12345678cbb";
+        String longestSub = LengthOfLongestUnrepeatSubstring.getInstance().getLongestUnrepeatSubstring(origString);
+
+        System.out.println("longestSub = " + longestSub + ", length = " + longestSub.length());
+        assertEquals(longestSub, "ab12345678c");
+        assertEquals(longestSub.length(), 11);
+        
+        System.out.println("test LengthOfSubstring passed!");
     }
 }

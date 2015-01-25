@@ -32,7 +32,7 @@ public class MedianOfTwoSortedArraysTest
         return new TestSuite( MedianOfTwoSortedArraysTest.class );
     }
 
-    public void testQuickSolution()
+    public void testMediansOfTwoSortedArrays()
     {
         List<Integer> array1 = new ArrayList<Integer>();
         int number = 1;
@@ -59,11 +59,8 @@ public class MedianOfTwoSortedArraysTest
         System.out.println("medianSimple = " + medianOfSimple + ", consumeMillis = " + consumeMillisOfSimple);
         System.out.println("medianQuick = " + medianOfQuick + ", consumeMillis = " + consumeMillisOfQuick);
         
-        if(medianOfSimple.equals(medianOfQuick)) {
-            System.out.println("median of two sorted arrays test passed");
-        }
-        else {
-            throw new RuntimeException("median of two sorted arrays test failed!");
-        }
+        super.assertEquals(medianOfSimple, medianOfQuick);
+        
+        System.out.println("test MedianOfTwoSortedArrays passed!");
     }
 }
