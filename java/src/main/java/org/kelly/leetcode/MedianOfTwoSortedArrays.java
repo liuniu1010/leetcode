@@ -44,6 +44,8 @@ public class MedianOfTwoSortedArrays {
     /*
      * this is the quick solution to get median
      * the logic is a bit complicated
+     * the running time should be O(log(min(m,n)), m and n represent 
+     * size of sortedArray1 and sortedArray2
      */
     public Median getMedianWithQuickSolution(List<Integer> sortedArray1, List<Integer> sortedArray2) {
         this.assertInput(sortedArray1, sortedArray2);

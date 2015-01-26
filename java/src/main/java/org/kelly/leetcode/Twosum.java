@@ -18,7 +18,7 @@ import org.kelly.leetcode.exception.InvalidInputException;
  */
 public class Twosum {
     /**
-     * search the two indexes
+     * search the two indexes, the running time should be O(size of input)
      * @param input
      * @param target
      * @return          if the two indexes were found out, return the related Result instance,

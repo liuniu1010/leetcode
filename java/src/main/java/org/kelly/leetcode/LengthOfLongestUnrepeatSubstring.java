@@ -20,7 +20,10 @@ public class LengthOfLongestUnrepeatSubstring {
     public static LengthOfLongestUnrepeatSubstring getInstance() {
         return instance;
     }
-    
+
+    /*
+     * the running time should be O(size of origString)
+     */     
     public String getLongestUnrepeatSubstring(String origString) {
         Map<String, Integer> indexCache = new HashMap<String, Integer>();
         String maxSubstring = "";
