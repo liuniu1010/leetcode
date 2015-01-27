@@ -1,7 +1,9 @@
-package org.kelly.leetcode;
+/***
+ * source: https://oj.leetcode.com/problemset/algorithms/
+ * Author: Liu, Niu <liuniu@tsinghua.org.cn>
+ */
 
-import java.util.List;
-import java.util.ArrayList;
+package org.kelly.leetcode;
 
 import org.kelly.leetcode.exception.InvalidInputException;
 
@@ -23,59 +25,61 @@ public class AddTwoNumbers {
         return instance;
     }
 
-    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+    /*
+     * the preferred running time should be O(max(l1.size, l2.size))
+     */
+    public ListNode addTwoNumbersWithRecursiveSolution(ListNode l1, ListNode l2) {
         assertInput(l1);
         assertInput(l2);
 
-        List<Integer> list1 = generateListFromListNode(l1);
-        List<Integer> list2 = generateListFromListNode(l2);
-
-        List<Integer> resultList = new ArrayList<Integer>();
-        int maxLengthOfList = Math.max(list1.size(), list2.size());
-        int extra = 0;
-        for(int i = 0;i < maxLengthOfList;i++) {
-            int value1 = (i >= list1.size())?0:list1.get(i);
-            int value2 = (i >= list2.size())?0:list2.get(i);
-            
-            int resultSingleDigit = (value1 + value2 + extra) % 10;
-            extra = (value1 + value2 + extra) / 10;
-
-            resultList.add(resultSingleDigit);
-        }
-        
-        if(extra > 0) {
-            resultList.add(extra);
-        }
-
-        return generateListNodeFromList(resultList);
+        return addTwoNumbersRecursive(l1, l2, 0);
     }
 
-    private List<Integer> generateListFromListNode(ListNode ld) {
-        List<Integer> list = new ArrayList<Integer>();
-        list.add(0, ld.val);
-        while(ld.next != null) {
-            list.add(ld.next.val);
-            ld = ld.next;
+    private ListNode addTwoNumbersRecursive(ListNode l1, ListNode l2, int extra) {
+        if(l1 == null && l2 == null && extra == 0) {
+            return null;
         }
 
-        return list;
-    }
-
-    private ListNode generateListNodeFromList(List<Integer> list) {
-        ListNode nextNode = null;
-        ListNode resultNode = null;
-        for(int i = 0; i < list.size(); i++) {
-            ListNode ld = new ListNode(list.get(i));
-            ld.next = nextNode;
-            nextNode = ld;
-
-            if(i >= list.size() - 1) {
-                resultNode = ld;
-                break;
-            }
-        }
+        ListNode resultNode = new ListNode();
+        resultNode.val = (((l1 == null)?0:l1.val) + ((l2 == null)?0:l2.val) + extra) % 10;
+        int nextExtra = (((l1 == null)?0:l1.val) + ((l2 == null)?0:l2.val) + extra) / 10;
+        resultNode.next = addTwoNumbersRecursive((l1 == null)?null:l1.next, (l2 == null)?null:l2.next, nextExtra);
         
         return resultNode;
+    }
+
+    /*
+     * the preferred running time should be O(max(l1.size, l2.size))
+     */
+    public ListNode addTwoNumbersWithLoopSolution(ListNode l1, ListNode l2) {
+        assertInput(l1);
+        assertInput(l2);
+
+        ListNode curNode1 = l1;
+        ListNode curNode2 = l2;
+        int extra = 0;
+        ListNode curResult = null;
+        ListNode preResult = null;
+        ListNode firstResult = null;
+        while((curNode1 != null) || (curNode2 != null) || (extra != 0)) {
+            curResult = new ListNode();
+            curResult.val = (((curNode1 == null)?0:curNode1.val) + ((curNode2 == null)?0:curNode2.val) + extra) % 10;
+            extra = (((curNode1 == null)?0:curNode1.val) + ((curNode2 == null)?0:curNode2.val) + extra) / 10;
+
+            curNode1 = (curNode1 == null)?null:curNode1.next;
+            curNode2 = (curNode2 == null)?null:curNode2.next;
+            
+            if(preResult != null) {
+                preResult.next = curResult;
+            } 
+            else{
+                firstResult = curResult;
+            }
+
+            preResult = curResult;
+        }
+
+        return firstResult;
     }
 
     private void assertInput(ListNode ld) {
@@ -91,8 +95,19 @@ public class AddTwoNumbers {
 class ListNode {
     public int val;
     public ListNode next;
+
+    public ListNode() {
+        val = 0;
+        next = null;
+    }
+
     public ListNode(int x) {
         val = x;
         next = null;
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(val) + "->" + ((next == null)?"":next.toString());
     }
 }
