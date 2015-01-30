@@ -6,6 +6,7 @@
 package org.kelly.leetcode;
 
 import org.kelly.leetcode.exception.InvalidInputException;
+
 /***
  * Given a string S, find the longest palindromic substring in S. You may assume 
  * that the maximum length of S is 1000, and there exists one unique longest 
@@ -26,8 +27,19 @@ public class LongestPalindromic {
     public String getLongestPalindromicSubstring(String inputString) {
         assertInput(inputString);
 
-        // to be implemented
-        return null;
+        Peak currentPeak = null;
+        String currentMaxSubstring = "";
+        do {
+            Peak nextPeak = getNextPeakWithSimpleSolution(inputString, currentPeak);
+            if(nextPeak == null) {
+                break;
+            }
+            currentMaxSubstring = getLongestPalindromicSubstringBasedOnPeak(inputString, currentMaxSubstring, nextPeak);
+            currentPeak = nextPeak;
+        }
+        while(true);
+
+        return currentMaxSubstring;
     }
 
     private void assertInput(String inputString) {
@@ -42,6 +54,36 @@ public class LongestPalindromic {
         }
         else {
             return getLongestPalindromicSubstringBasedOnDoublePeak(inputString, currentMaxSubstring, (DoublePeak)peak);
+        }
+    }
+
+    private Peak getNextPeakWithSimpleSolution(String inputString, Peak currentPeak) {
+        if(currentPeak == null) {
+            SinglePeak resultPeak = new SinglePeak(0);
+            return resultPeak;
+        }
+
+        if(currentPeak instanceof SinglePeak) {
+            SinglePeak singlePeak = (SinglePeak)currentPeak;
+            if(singlePeak.index >= inputString.length() - 1) {
+                // it is at the end
+                return null;
+            }
+            else {
+                DoublePeak resultPeak = new DoublePeak(singlePeak.index, singlePeak.index + 1);
+                return resultPeak;
+            }
+        }
+        else {// it is the case that currentPeak instanceof DoublePeak
+            DoublePeak doublePeak = (DoublePeak)currentPeak;
+            if(doublePeak.index2 >= inputString.length() - 1) {
+                // it is at the end
+                return null;
+            }
+            else {
+                SinglePeak resultPeak = new SinglePeak(doublePeak.index2);
+                return resultPeak;
+            }
         }
     }
 
@@ -78,8 +120,39 @@ public class LongestPalindromic {
     }
     
     private String getLongestPalindromicSubstringBasedOnDoublePeak(String inputString, String currentMaxSubstring, DoublePeak doublePeak) {
-        // to be implemented
-        return null;
+        int possibleMaxLength = Math.min(doublePeak.index1, ((inputString.length() - 1) - doublePeak.index2)) * 2 + 2;
+        if(possibleMaxLength <= currentMaxSubstring.length()) {
+            return currentMaxSubstring;
+        }
+
+        if(inputString.charAt(doublePeak.index1) != inputString.charAt(doublePeak.index2)) {
+            return currentMaxSubstring;
+        }
+
+        int step = 0;
+        char leftCh;
+        char rightCh;
+        do {
+            if(doublePeak.index1 - step < 0
+                || doublePeak.index2 + step > inputString.length() - 1) {
+                step--;
+                break;
+            }
+
+            leftCh = inputString.charAt(doublePeak.index1 - step);
+            rightCh = inputString.charAt(doublePeak.index2 + step);
+
+            if(leftCh != rightCh) {
+                step--;
+                break;
+            }
+
+            step++;
+        }
+        while(true);
+
+        String maxSubstring = inputString.substring(doublePeak.index1 - step, doublePeak.index2 + step + 1);
+        return (maxSubstring.length() <= currentMaxSubstring.length())?currentMaxSubstring:maxSubstring;
     }
 }
 
@@ -95,10 +168,19 @@ interface Peak{
 
 class SinglePeak implements Peak {
     public int index;
+
+    public SinglePeak(int index) {
+        this.index = index;
+    }
 }
 
 class DoublePeak implements Peak {
     public int index1;
     public int index2;  // infact, it is always the case that index2 == index1 + 1
                         // for us easy to understand, we still define two indexes here
+
+    public DoublePeak(int index1, int index2) {
+        this.index1 = index1;
+        this.index2 = index2;
+    }
 }
