@@ -24,13 +24,17 @@ public class LongestPalindromic {
         return instance;
     }
 
+    /*
+     * the preferred running time is O(n^2)
+     * n is the length of inputString
+     */
     public String getLongestPalindromicSubstring(String inputString) {
         assertInput(inputString);
 
         Peak currentPeak = null;
         String currentMaxSubstring = "";
         do {
-            Peak nextPeak = getNextPeakWithSimpleSolution(inputString, currentPeak);
+            Peak nextPeak = getNextPeak(inputString, currentPeak);
             if(nextPeak == null) {
                 break;
             }
@@ -57,7 +61,7 @@ public class LongestPalindromic {
         }
     }
 
-    private Peak getNextPeakWithSimpleSolution(String inputString, Peak currentPeak) {
+    private Peak getNextPeak(String inputString, Peak currentPeak) {
         if(currentPeak == null) {
             SinglePeak resultPeak = new SinglePeak(0);
             return resultPeak;
@@ -86,6 +90,7 @@ public class LongestPalindromic {
             }
         }
     }
+
 
     private String getLongestPalindromicSubstringBasedOnSinglePeak(String inputString, String currentMaxSubstring, SinglePeak singlePeak) {
         int possibleMaxLength = Math.min(singlePeak.index, (inputString.length() - 1) - singlePeak.index) * 2 + 1;
