@@ -72,23 +72,23 @@ public class LongestPalindromic {
 
         if(currentPeak instanceof SinglePeak) {
             SinglePeak singlePeak = (SinglePeak)currentPeak;
-            if(singlePeak.index >= inputString.length() - 1) {
+            if(singlePeak.getIndex() >= inputString.length() - 1) {
                 // it is at the end
                 return null;
             }
             else {
-                DoublePeak resultPeak = new DoublePeak(singlePeak.index, singlePeak.index + 1);
+                DoublePeak resultPeak = new DoublePeak(singlePeak.getIndex(), singlePeak.getIndex() + 1);
                 return resultPeak;
             }
         }
         else {// it is the case that currentPeak instanceof DoublePeak
             DoublePeak doublePeak = (DoublePeak)currentPeak;
-            if(doublePeak.index2 >= inputString.length() - 1) {
+            if(doublePeak.getIndex2() >= inputString.length() - 1) {
                 // it is at the end
                 return null;
             }
             else {
-                SinglePeak resultPeak = new SinglePeak(doublePeak.index2);
+                SinglePeak resultPeak = new SinglePeak(doublePeak.getIndex2());
                 return resultPeak;
             }
         }
@@ -96,7 +96,7 @@ public class LongestPalindromic {
 
 
     private SubstringIndex getLongestPalindromicSubstringBasedOnSinglePeak(String inputString, SubstringIndex currentMaxSubstringIndex, SinglePeak singlePeak) {
-        int possibleMaxLength = Math.min(singlePeak.index, (inputString.length() - 1) - singlePeak.index) * 2 + 1;
+        int possibleMaxLength = Math.min(singlePeak.getIndex(), (inputString.length() - 1) - singlePeak.getIndex()) * 2 + 1;
         if(possibleMaxLength <= currentMaxSubstringIndex.length()) {
             // no need to check with this singlePeak
             return currentMaxSubstringIndex;
@@ -106,13 +106,13 @@ public class LongestPalindromic {
         char leftCh;
         char rightCh;
         do {
-            if(singlePeak.index - step < 0
-                || singlePeak.index + step > inputString.length() - 1) {
+            if(singlePeak.getIndex() - step < 0
+                || singlePeak.getIndex() + step > inputString.length() - 1) {
                 step--;
                 break;
             }
-            leftCh = inputString.charAt(singlePeak.index - step);
-            rightCh = inputString.charAt(singlePeak.index + step);
+            leftCh = inputString.charAt(singlePeak.getIndex() - step);
+            rightCh = inputString.charAt(singlePeak.getIndex() + step);
 
             if(leftCh != rightCh) {
                 step--;
@@ -123,17 +123,17 @@ public class LongestPalindromic {
         }
         while(true);
 
-        SubstringIndex maxSubstringIndex = new SubstringIndex(singlePeak.index - step, singlePeak.index + step + 1);
+        SubstringIndex maxSubstringIndex = new SubstringIndex(singlePeak.getIndex() - step, singlePeak.getIndex() + step + 1);
         return (maxSubstringIndex.length() <= currentMaxSubstringIndex.length())?currentMaxSubstringIndex:maxSubstringIndex;
     }
     
     private SubstringIndex getLongestPalindromicSubstringBasedOnDoublePeak(String inputString, SubstringIndex currentMaxSubstringIndex, DoublePeak doublePeak) {
-        int possibleMaxLength = Math.min(doublePeak.index1, ((inputString.length() - 1) - doublePeak.index2)) * 2 + 2;
+        int possibleMaxLength = Math.min(doublePeak.getIndex1(), ((inputString.length() - 1) - doublePeak.getIndex2())) * 2 + 2;
         if(possibleMaxLength <= currentMaxSubstringIndex.length()) {
             return currentMaxSubstringIndex;
         }
 
-        if(inputString.charAt(doublePeak.index1) != inputString.charAt(doublePeak.index2)) {
+        if(inputString.charAt(doublePeak.getIndex1()) != inputString.charAt(doublePeak.getIndex2())) {
             return currentMaxSubstringIndex;
         }
 
@@ -141,14 +141,14 @@ public class LongestPalindromic {
         char leftCh;
         char rightCh;
         do {
-            if(doublePeak.index1 - step < 0
-                || doublePeak.index2 + step > inputString.length() - 1) {
+            if(doublePeak.getIndex1() - step < 0
+                || doublePeak.getIndex2() + step > inputString.length() - 1) {
                 step--;
                 break;
             }
 
-            leftCh = inputString.charAt(doublePeak.index1 - step);
-            rightCh = inputString.charAt(doublePeak.index2 + step);
+            leftCh = inputString.charAt(doublePeak.getIndex1() - step);
+            rightCh = inputString.charAt(doublePeak.getIndex2() + step);
 
             if(leftCh != rightCh) {
                 step--;
@@ -159,7 +159,7 @@ public class LongestPalindromic {
         }
         while(true);
 
-        SubstringIndex maxSubstringIndex = new SubstringIndex(doublePeak.index1 - step, doublePeak.index2 + step + 1);
+        SubstringIndex maxSubstringIndex = new SubstringIndex(doublePeak.getIndex1() - step, doublePeak.getIndex2() + step + 1);
         return (maxSubstringIndex.length() <= currentMaxSubstringIndex.length())?currentMaxSubstringIndex:maxSubstringIndex;
     }
 }
@@ -175,21 +175,33 @@ interface Peak{
 }
 
 class SinglePeak implements Peak {
-    public int index;
+    private int index;
 
-    public SinglePeak(int index) {
-        this.index = index;
+    public SinglePeak(int idx) {
+        this.index = idx;
+    }
+
+    public int getIndex() {
+        return index;
     }
 }
 
 class DoublePeak implements Peak {
-    public int index1;
-    public int index2;  // infact, it is always the case that index2 == index1 + 1
+    private int index1;
+    private int index2;  // infact, it is always the case that index2 == index1 + 1
                         // for us easy to understand, we still define two indexes here
 
-    public DoublePeak(int index1, int index2) {
-        this.index1 = index1;
-        this.index2 = index2;
+    public DoublePeak(int idx1, int idx2) {
+        this.index1 = idx1;
+        this.index2 = idx2;
+    }
+
+    public int getIndex1() {
+        return index1;
+    }
+
+    public int getIndex2() {
+        return index2;
     }
 }
 

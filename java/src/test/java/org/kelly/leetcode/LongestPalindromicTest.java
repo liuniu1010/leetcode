@@ -34,5 +34,6 @@ public class LongestPalindromicTest
         String longestPalindromic = LongestPalindromic.getInstance().getLongestPalindromicSubstring(inputString);
 
         System.out.println("longest parlindromic = " + longestPalindromic + ", length = " + longestPalindromic.length());
+        assertEquals(longestPalindromic, "abcdcba");
     }
 }
