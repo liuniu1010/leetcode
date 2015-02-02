@@ -8,6 +8,9 @@ package org.kelly.leetcode;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.kelly.leetcode.exception.InvalidInputException;
+import org.kelly.leetcode.util.SubstringIndex;
+
 /**
  * Given a string, find the length of the longest substring without repeating 
  * characters. For example, the longest substring without repeating letters 
@@ -27,39 +30,36 @@ public class LengthOfLongestUnrepeatSubstring {
     }
 
     /*
-     * the running time should be O(size of origString)
+     * the running time should be O(size of inputString)
+     *
      */     
-    public String getLongestUnrepeatSubstring(String origString) {
+    public String getLongestUnrepeatSubstring(String inputString) {
+        assertInput(inputString);
+
         Map<String, Integer> indexCache = new HashMap<String, Integer>();
-        String maxSubstring = "";
-        int maxBeginIndex = 0;
-        int maxEndIndex = 0;
+        SubstringIndex maxSubstringIndex = new SubstringIndex(0,0);
         int currentBeginIndex = 0;
-        for(int index = 0;index < origString.length();index++) {
-            String curChar = origString.substring(index, index + 1);
+        for(int index = 0;index < inputString.length();index++) {
+            String curChar = inputString.substring(index, index + 1);
             if(indexCache.containsKey(curChar)) {
                 /* find the possible repeated char, but we should check index value to make
                  * sure that the index is before or after currentBeginIndex
                  */
                 int repeatIndex = indexCache.get(curChar);
                 if(repeatIndex < currentBeginIndex) {
-                    String currentSubstring = origString.substring(currentBeginIndex, index + 1);
-                    if(currentSubstring.length() > maxSubstring.length()) {
-                        maxSubstring = currentSubstring;
-                        maxBeginIndex = currentBeginIndex;
-                        maxEndIndex = index + 1;
+                    SubstringIndex currentSubstringIndex = new SubstringIndex(currentBeginIndex, index + 1);
+                    if(currentSubstringIndex.length() > maxSubstringIndex.length()) {
+                        maxSubstringIndex = currentSubstringIndex;
                     }
                 } 
                 else {
                     currentBeginIndex = repeatIndex + 1;
                 }
             } 
-            else { // 
-                String currentSubstring = origString.substring(currentBeginIndex, index + 1);
-                if(currentSubstring.length() > maxSubstring.length()) {
-                    maxSubstring = currentSubstring;
-                    maxBeginIndex = currentBeginIndex;
-                    maxEndIndex = index + 1;
+            else {
+                SubstringIndex currentSubstringIndex = new SubstringIndex(currentBeginIndex, index + 1);
+                if(currentSubstringIndex.length() > maxSubstringIndex.length()) {
+                    maxSubstringIndex = currentSubstringIndex;
                 }
             }
 
@@ -70,6 +70,12 @@ public class LengthOfLongestUnrepeatSubstring {
             indexCache.put(curChar, index);
         }
 
-        return maxSubstring;
+        return inputString.substring(maxSubstringIndex.getBeginIndex(), maxSubstringIndex.getEndIndex());
+    }
+
+    private void assertInput(String inputString) {
+        if(inputString == null || inputString.equals("")) {
+            throw new InvalidInputException("input string should not be empty!");
+        } 
     }
 }

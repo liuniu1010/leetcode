@@ -6,6 +6,7 @@
 package org.kelly.leetcode;
 
 import org.kelly.leetcode.exception.InvalidInputException;
+import org.kelly.leetcode.util.SubstringIndex;
 
 /***
  * Given a string S, find the longest palindromic substring in S. You may assume 
@@ -27,23 +28,25 @@ public class LongestPalindromic {
     /*
      * the preferred running time is O(n^2)
      * n is the length of inputString
+     *
      */
     public String getLongestPalindromicSubstring(String inputString) {
         assertInput(inputString);
 
         Peak currentPeak = null;
-        String currentMaxSubstring = "";
+        SubstringIndex currentMaxSubstringIndex = new SubstringIndex(0, 0);
         do {
             Peak nextPeak = getNextPeak(inputString, currentPeak);
             if(nextPeak == null) {
                 break;
             }
-            currentMaxSubstring = getLongestPalindromicSubstringBasedOnPeak(inputString, currentMaxSubstring, nextPeak);
+            currentMaxSubstringIndex = getLongestPalindromicSubstringBasedOnPeak(inputString, currentMaxSubstringIndex, nextPeak);
             currentPeak = nextPeak;
         }
         while(true);
 
-        return currentMaxSubstring;
+        // here we can use String.substring() one time, the running time is O(n), no effect for the whole running time
+        return inputString.substring(currentMaxSubstringIndex.getBeginIndex(), currentMaxSubstringIndex.getEndIndex());
     }
 
     private void assertInput(String inputString) {
@@ -52,12 +55,12 @@ public class LongestPalindromic {
         }
     }
 
-    private String getLongestPalindromicSubstringBasedOnPeak(String inputString, String currentMaxSubstring, Peak peak) {
+    private SubstringIndex getLongestPalindromicSubstringBasedOnPeak(String inputString, SubstringIndex currentMaxSubstringIndex, Peak peak) {
         if(peak instanceof SinglePeak) {
-            return getLongestPalindromicSubstringBasedOnSinglePeak(inputString, currentMaxSubstring, (SinglePeak)peak);
+            return getLongestPalindromicSubstringBasedOnSinglePeak(inputString, currentMaxSubstringIndex, (SinglePeak)peak);
         }
         else {
-            return getLongestPalindromicSubstringBasedOnDoublePeak(inputString, currentMaxSubstring, (DoublePeak)peak);
+            return getLongestPalindromicSubstringBasedOnDoublePeak(inputString, currentMaxSubstringIndex, (DoublePeak)peak);
         }
     }
 
@@ -92,11 +95,11 @@ public class LongestPalindromic {
     }
 
 
-    private String getLongestPalindromicSubstringBasedOnSinglePeak(String inputString, String currentMaxSubstring, SinglePeak singlePeak) {
+    private SubstringIndex getLongestPalindromicSubstringBasedOnSinglePeak(String inputString, SubstringIndex currentMaxSubstringIndex, SinglePeak singlePeak) {
         int possibleMaxLength = Math.min(singlePeak.index, (inputString.length() - 1) - singlePeak.index) * 2 + 1;
-        if(possibleMaxLength <= currentMaxSubstring.length()) {
+        if(possibleMaxLength <= currentMaxSubstringIndex.length()) {
             // no need to check with this singlePeak
-            return currentMaxSubstring;
+            return currentMaxSubstringIndex;
         }
 
         int step = 0;
@@ -120,18 +123,18 @@ public class LongestPalindromic {
         }
         while(true);
 
-        String maxSubstring = inputString.substring(singlePeak.index - step, singlePeak.index + step + 1);
-        return (maxSubstring.length() <= currentMaxSubstring.length())?currentMaxSubstring:maxSubstring;
+        SubstringIndex maxSubstringIndex = new SubstringIndex(singlePeak.index - step, singlePeak.index + step + 1);
+        return (maxSubstringIndex.length() <= currentMaxSubstringIndex.length())?currentMaxSubstringIndex:maxSubstringIndex;
     }
     
-    private String getLongestPalindromicSubstringBasedOnDoublePeak(String inputString, String currentMaxSubstring, DoublePeak doublePeak) {
+    private SubstringIndex getLongestPalindromicSubstringBasedOnDoublePeak(String inputString, SubstringIndex currentMaxSubstringIndex, DoublePeak doublePeak) {
         int possibleMaxLength = Math.min(doublePeak.index1, ((inputString.length() - 1) - doublePeak.index2)) * 2 + 2;
-        if(possibleMaxLength <= currentMaxSubstring.length()) {
-            return currentMaxSubstring;
+        if(possibleMaxLength <= currentMaxSubstringIndex.length()) {
+            return currentMaxSubstringIndex;
         }
 
         if(inputString.charAt(doublePeak.index1) != inputString.charAt(doublePeak.index2)) {
-            return currentMaxSubstring;
+            return currentMaxSubstringIndex;
         }
 
         int step = 0;
@@ -156,8 +159,8 @@ public class LongestPalindromic {
         }
         while(true);
 
-        String maxSubstring = inputString.substring(doublePeak.index1 - step, doublePeak.index2 + step + 1);
-        return (maxSubstring.length() <= currentMaxSubstring.length())?currentMaxSubstring:maxSubstring;
+        SubstringIndex maxSubstringIndex = new SubstringIndex(doublePeak.index1 - step, doublePeak.index2 + step + 1);
+        return (maxSubstringIndex.length() <= currentMaxSubstringIndex.length())?currentMaxSubstringIndex:maxSubstringIndex;
     }
 }
 
@@ -189,3 +192,4 @@ class DoublePeak implements Peak {
         this.index2 = index2;
     }
 }
+

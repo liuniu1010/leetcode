@@ -30,7 +30,7 @@ public class LongestPalindromicTest
     }
 
     public void testLongestPalindromic() {
-        String inputString = "aclsalfabcdcbcadjalajsfa";
+        String inputString = "abcd11334422abcdcbaefghijklmn";
         String longestPalindromic = LongestPalindromic.getInstance().getLongestPalindromicSubstring(inputString);
 
         System.out.println("longest parlindromic = " + longestPalindromic + ", length = " + longestPalindromic.length());
