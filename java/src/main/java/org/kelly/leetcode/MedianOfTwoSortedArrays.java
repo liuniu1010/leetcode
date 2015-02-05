@@ -20,10 +20,11 @@ import org.kelly.leetcode.exception.InvalidInputException;
  *
  */
 public class MedianOfTwoSortedArrays {
+    private static MedianOfTwoSortedArrays instance = new MedianOfTwoSortedArrays();
+
     private MedianOfTwoSortedArrays() {
     }
 
-    private static MedianOfTwoSortedArrays instance = new MedianOfTwoSortedArrays();
 
     public static MedianOfTwoSortedArrays getInstance() {
         return instance;
@@ -95,15 +96,11 @@ public class MedianOfTwoSortedArrays {
         int valueOfMedianRight = medianRight.getValue();
 
         if(valueOfMedianLeft == valueOfMedianRight) {
-            DoubleMedian resultMedian = new DoubleMedian(-1, valueOfMedianLeft, -1, valueOfMedianRight);
-            
-            return resultMedian;
+            return new DoubleMedian(-1, valueOfMedianLeft, -1, valueOfMedianRight);
         }
         
         if(sortedArrayLeft.size() == 1 && sortedArrayRight.size() == 1) {
-            DoubleMedian resultMedian = new DoubleMedian(-1, Math.min(valueOfMedianLeft, valueOfMedianRight), -1, Math.max(valueOfMedianLeft, valueOfMedianRight));
-
-            return resultMedian;
+            return new DoubleMedian(-1, Math.min(valueOfMedianLeft, valueOfMedianRight), -1, Math.max(valueOfMedianLeft, valueOfMedianRight));
         }
 
         if(sortedArrayLeft.size() == 1) { // here, the sortedArrayRight.size must be >= 3
@@ -139,9 +136,7 @@ public class MedianOfTwoSortedArrays {
         int valueAboveMedianRight = medianRight.getValue2();
 
         if(valueOfMedianLeft >= valueBelowMedianRight && valueOfMedianLeft <= valueAboveMedianRight) {
-            SingleMedian resultMedian = new SingleMedian(-1, valueOfMedianLeft);
-
-            return resultMedian;
+            return new SingleMedian(-1, valueOfMedianLeft);
         }
          
         if(sortedArrayLeft.size() == 1) {
@@ -177,9 +172,7 @@ public class MedianOfTwoSortedArrays {
         int valueAboveMedianRight = sortedArrayRight.get(medianRight.getIndex() + 1);
 
         if(valueBelowMedianLeft <= valueOfMedianRight && valueAboveMedianLeft >= valueOfMedianRight) {
-            SingleMedian resultMedian = new SingleMedian(-1, valueOfMedianRight);
-
-            return resultMedian;
+            return new SingleMedian(-1, valueOfMedianRight);
         }
 
         if(sortedArrayLeft.size() == 2) {
@@ -227,14 +220,10 @@ public class MedianOfTwoSortedArrays {
 
         if(sortedArrayLeft.size() == 2) { // it must be case that sortedArrayRight.size >= 4
             if(valueAboveMedianLeft <= valueBelowMedianRight) {
-                DoubleMedian resultMedian = new DoubleMedian(-1, Math.max(valueAboveMedianLeft, sortedArrayRight.get(medianRight.getIndex1() - 1)), -1, valueBelowMedianRight);
-
-                return resultMedian;
+                return new DoubleMedian(-1, Math.max(valueAboveMedianLeft, sortedArrayRight.get(medianRight.getIndex1() - 1)), -1, valueBelowMedianRight);
             }
             else { // it must be case that valueBelowMedianLeft >= valueAboveMedianRight
-                DoubleMedian resultMedian = new DoubleMedian(-1, valueAboveMedianRight, -1, Math.min(valueBelowMedianLeft, sortedArrayRight.get(medianRight.getIndex2() + 1)));
-
-                return resultMedian;
+                return new DoubleMedian(-1, valueAboveMedianRight, -1, Math.min(valueBelowMedianLeft, sortedArrayRight.get(medianRight.getIndex2() + 1)));
             }
         }
         
@@ -272,13 +261,9 @@ public class MedianOfTwoSortedArrays {
      */
     private Median getMedian(List<Integer> sortedArray) {
         if(isEven(sortedArray.size())) {
-            DoubleMedian median = new DoubleMedian((sortedArray.size() / 2) - 1, sortedArray.get((sortedArray.size() / 2) - 1), sortedArray.size() / 2, sortedArray.get(sortedArray.size() / 2));
-            
-            return median;
+            return new DoubleMedian((sortedArray.size() / 2) - 1, sortedArray.get((sortedArray.size() / 2) - 1), sortedArray.size() / 2, sortedArray.get(sortedArray.size() / 2));
         } else {
-            SingleMedian median = new SingleMedian(sortedArray.size() / 2, sortedArray.get(sortedArray.size() / 2));
-            
-            return median;
+            return new SingleMedian(sortedArray.size() / 2, sortedArray.get(sortedArray.size() / 2));
         }
     }
 
@@ -343,7 +328,7 @@ class SingleMedian implements Median {
             return false;
         }
         
-        return (value == ((SingleMedian)obj).getValue()); // no need to care the index
+        return value == ((SingleMedian)obj).getValue(); // no need to care the index
     }
 
     @Override
@@ -353,11 +338,11 @@ class SingleMedian implements Median {
 }
 
 class DoubleMedian implements Median {
-    public int index1;
-    public int value1;
+    private int index1;
+    private int value1;
     
-    public int index2;
-    public int value2;
+    private int index2;
+    private int value2;
 
     public DoubleMedian(int idx1, int val1, int idx2, int val2) {
         index1 = idx1;
@@ -384,7 +369,7 @@ class DoubleMedian implements Median {
     
     @Override
     public String toString() {
-        return String.valueOf(value1) + ", " + String.valueOf(value2);
+        return value1 + ", " + value2;
     }
     
     @Override

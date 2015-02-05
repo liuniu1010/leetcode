@@ -16,10 +16,10 @@ import org.kelly.leetcode.util.SubstringIndex;
  * @author liuniu
  */
 public class LongestPalindromic {
+    private static LongestPalindromic instance = new LongestPalindromic();
+
     private LongestPalindromic() {
     }
-
-    private static LongestPalindromic instance = new LongestPalindromic();
 
     public static LongestPalindromic getInstance() {
         return instance;
@@ -50,7 +50,7 @@ public class LongestPalindromic {
     }
 
     private void assertInput(String inputString) {
-        if(inputString == null || inputString.equals("")) {
+        if(inputString == null || "".equals(inputString)) {
             throw new InvalidInputException("input string cannot be null or empty!");
         }
     }
@@ -66,8 +66,7 @@ public class LongestPalindromic {
 
     private Peak getNextPeak(String inputString, Peak currentPeak) {
         if(currentPeak == null) {
-            SinglePeak resultPeak = new SinglePeak(0);
-            return resultPeak;
+            return new SinglePeak(0);
         }
 
         if(currentPeak instanceof SinglePeak) {
@@ -77,8 +76,7 @@ public class LongestPalindromic {
                 return null;
             }
             else {
-                DoublePeak resultPeak = new DoublePeak(singlePeak.getIndex(), singlePeak.getIndex() + 1);
-                return resultPeak;
+                return new DoublePeak(singlePeak.getIndex(), singlePeak.getIndex() + 1);
             }
         }
         else {// it is the case that currentPeak instanceof DoublePeak
@@ -88,8 +86,7 @@ public class LongestPalindromic {
                 return null;
             }
             else {
-                SinglePeak resultPeak = new SinglePeak(doublePeak.getIndex2());
-                return resultPeak;
+                return new SinglePeak(doublePeak.getIndex2());
             }
         }
     }
@@ -128,7 +125,7 @@ public class LongestPalindromic {
     }
     
     private SubstringIndex getLongestPalindromicSubstringBasedOnDoublePeak(String inputString, SubstringIndex currentMaxSubstringIndex, DoublePeak doublePeak) {
-        int possibleMaxLength = Math.min(doublePeak.getIndex1(), ((inputString.length() - 1) - doublePeak.getIndex2())) * 2 + 2;
+        int possibleMaxLength = Math.min(doublePeak.getIndex1(), (inputString.length() - 1) - doublePeak.getIndex2()) * 2 + 2;
         if(possibleMaxLength <= currentMaxSubstringIndex.length()) {
             return currentMaxSubstringIndex;
         }

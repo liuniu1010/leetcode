@@ -16,10 +16,11 @@ import org.kelly.leetcode.exception.InvalidInputException;
  *
  */
 public class AddTwoNumbers {
+    private static AddTwoNumbers instance = new AddTwoNumbers();
+
     private AddTwoNumbers() {
     }
 
-    private static AddTwoNumbers instance = new AddTwoNumbers();
 
     public static AddTwoNumbers getInstance() {
         return instance;
@@ -40,12 +41,10 @@ public class AddTwoNumbers {
             return null;
         }
 
-        ListNode resultNode = new ListNode();
-        resultNode.val = (((l1 == null)?0:l1.val) + ((l2 == null)?0:l2.val) + extra) % 10;
-        int nextExtra = (((l1 == null)?0:l1.val) + ((l2 == null)?0:l2.val) + extra) / 10;
-        resultNode.next = addTwoNumbersRecursive((l1 == null)?null:l1.next, (l2 == null)?null:l2.next, nextExtra);
-        
-        return resultNode;
+        int value = (((l1 == null)?0:l1.getVal()) + ((l2 == null)?0:l2.getVal()) + extra) % 10;
+        int nextExtra = (((l1 == null)?0:l1.getVal()) + ((l2 == null)?0:l2.getVal()) + extra) / 10;
+        ListNode nextNode = addTwoNumbersRecursive((l1 == null)?null:l1.getNext(), (l2 == null)?null:l2.getNext(), nextExtra);
+        return new ListNode(value, nextNode);
     }
 
     /*
@@ -62,15 +61,15 @@ public class AddTwoNumbers {
         ListNode preResult = null;
         ListNode firstResult = null;
         while((curNode1 != null) || (curNode2 != null) || (extra != 0)) {
-            curResult = new ListNode();
-            curResult.val = (((curNode1 == null)?0:curNode1.val) + ((curNode2 == null)?0:curNode2.val) + extra) % 10;
-            extra = (((curNode1 == null)?0:curNode1.val) + ((curNode2 == null)?0:curNode2.val) + extra) / 10;
+            int value = (((curNode1 == null)?0:curNode1.getVal()) + ((curNode2 == null)?0:curNode2.getVal()) + extra) % 10;
+            extra = (((curNode1 == null)?0:curNode1.getVal()) + ((curNode2 == null)?0:curNode2.getVal()) + extra) / 10;
 
-            curNode1 = (curNode1 == null)?null:curNode1.next;
-            curNode2 = (curNode2 == null)?null:curNode2.next;
+            curNode1 = (curNode1 == null)?null:curNode1.getNext();
+            curNode2 = (curNode2 == null)?null:curNode2.getNext();
+            curResult = new ListNode(value);
             
             if(preResult != null) {
-                preResult.next = curResult;
+                preResult.setNext(curResult);
             } 
             else{
                 firstResult = curResult;
@@ -93,8 +92,8 @@ public class AddTwoNumbers {
  * for convenience, all variables in this class are defined as public
  */
 class ListNode {
-    public int val;
-    public ListNode next;
+    private int val;
+    private ListNode next;
 
     public ListNode() {
         val = 0;
@@ -104,6 +103,23 @@ class ListNode {
     public ListNode(int x) {
         val = x;
         next = null;
+    }
+
+    public ListNode(int x, ListNode nextNode) {
+        val = x;
+        next = nextNode;
+    }
+
+    public int getVal() {
+        return val;
+    }
+
+    public ListNode getNext() {
+        return next;
+    }
+
+    public void setNext(ListNode nextNode) {
+        next = nextNode;
     }
 
     @Override

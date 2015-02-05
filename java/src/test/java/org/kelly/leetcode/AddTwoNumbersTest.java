@@ -65,10 +65,9 @@ public class AddTwoNumbersTest
         ListNode nextNode = null;
         for(int i = 0;i < sNumber.length();i++) {
             String ch = sNumber.substring(i, i + 1);
-            ListNode curNode = new ListNode();
-            curNode.val = new Integer(ch);
+            ListNode curNode = new ListNode(new Integer(ch));
 
-            curNode.next = nextNode;
+            curNode.setNext(nextNode);
             nextNode = curNode;
 
             if(i >= sNumber.length() - 1) {

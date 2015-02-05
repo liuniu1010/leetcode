@@ -43,14 +43,14 @@ public class TwosumTest
         
         Result result = Twosum.searchTwosum(input, target);
         if(result != null) {
-            System.out.println("index1 = " + result.index1);
-            System.out.println("index2 = " + result.index2);
+            System.out.println("index1 = " + result.getIndex1());
+            System.out.println("index2 = " + result.getIndex2());
         } else {
             System.out.println("cannot find the two indexes!");
         }
         
-        assertEquals(result.index1, 0);
-        assertEquals(result.index2, 3);
+        assertEquals(result.getIndex1(), 0);
+        assertEquals(result.getIndex2(), 3);
         
         System.out.println("test Twosum passed!");
     }

@@ -22,6 +22,9 @@ import org.kelly.leetcode.exception.InvalidInputException;
  * @author liuniu
  */
 public class Twosum {
+    private Twosum() {
+    }
+
     /**
      * search the two indexes, the running time should be O(size of input)
      * @param input
@@ -46,10 +49,7 @@ public class Twosum {
             int currentValue = input.get(i);
             int searchValue = target - currentValue;
             if(inputCache.containsKey(searchValue)) {
-                Result result = new Result();
-                result.index1 = i;
-                result.index2 = inputCache.get(searchValue);
-                return result;
+                return new Result(i, inputCache.get(searchValue));
             }
         }
         
@@ -70,11 +70,19 @@ public class Twosum {
 }
 
 class Result {
-    public Result() {
-        index1 = 0;
-        index2 = 0;
+    private int index1;
+    private int index2;
+
+    public Result(int idx1, int idx2) {
+        index1 = idx1;
+        index2 = idx2;
     }
     
-    public int index1;
-    public int index2;
+    public int getIndex1() {
+        return index1;
+    }
+
+    public int getIndex2() {
+        return index2;
+    }
 }

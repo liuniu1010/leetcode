@@ -20,10 +20,11 @@ import org.kelly.leetcode.util.SubstringIndex;
  *
  */
 public class LengthOfLongestUnrepeatSubstring {
+    private static LengthOfLongestUnrepeatSubstring instance = new LengthOfLongestUnrepeatSubstring();
+
     private LengthOfLongestUnrepeatSubstring() {
     }
     
-    private static LengthOfLongestUnrepeatSubstring instance = new LengthOfLongestUnrepeatSubstring();
     
     public static LengthOfLongestUnrepeatSubstring getInstance() {
         return instance;
@@ -74,7 +75,7 @@ public class LengthOfLongestUnrepeatSubstring {
     }
 
     private void assertInput(String inputString) {
-        if(inputString == null || inputString.equals("")) {
+        if(inputString == null || "".equals(inputString)) {
             throw new InvalidInputException("input string should not be empty!");
         } 
     }
