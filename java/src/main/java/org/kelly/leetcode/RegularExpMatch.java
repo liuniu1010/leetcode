@@ -37,6 +37,18 @@ public class RegularExpMatch {
         if(regex == null || str.isEmpty()) {
             throw new InvalidInputException("input params cannot be empty!");
         }
+
+        if(regex.startsWith("*")) {
+            throw new InvalidInputException("* cannot be the first letter of regex!");
+        }
+
+        if(regex.indexOf("**") >= 0) {
+            throw new InvalidInputException("** cannot be in the regex!");
+        }
+
+        if(regex.indexOf(".*") >= 0) {
+            throw new InvalidInputException(".* cannot be in the regex!");
+        }
     }
 
     public boolean isMatch(String str, String regex) {
@@ -76,16 +88,21 @@ public class RegularExpMatch {
         if(index < 0) {
             return new SimplePattern(leftRegex);
         }
-        else if(index == 0) {
-            if(leftRegex.startsWith(CONST_DOT)){
-                return new DotPattern();
-            }
-            else { // leftRegex.startsWith(CONST_ASTERISK)
-                return new AsteriskPattern();
-            }
+        else if(index == 0) { // it must be startsWith '.', if it is startsWith '*", there must be some logic error in somewhere
+            return new DotPattern();
         }
         else {
-            return new SimplePattern(leftRegex.substring(0, index));
+            if(leftRegex.indexOf(CONST_DOT) == index) { 
+                return new SimplePattern(leftRegex.substring(0, index));
+            }
+            else {// it must be case that leftRegex.indexOf(CONST_ASTERISK) == index)
+                if(index == 1) {
+                    return new AsteriskPattern(leftRegex.substring(0, 1));
+                }
+                else {// index > 1
+                    return new SimplePattern(leftRegex.substring(0, index - 1));
+                }
+            }
         }
     }
 
@@ -113,11 +130,14 @@ public class RegularExpMatch {
     }
 }
 
-interface MyPattern {
-    public int length();
+abstract class MyPattern {
+    protected final static String CONST_DOT = ".";
+    protected final static String CONST_ASTERISK = "*";
+
+    abstract public int length();
 }
 
-class SimplePattern implements MyPattern {
+class SimplePattern extends MyPattern {
     private String string;
 
     public SimplePattern(String str) {
@@ -134,16 +154,22 @@ class SimplePattern implements MyPattern {
     }
 }
 
-class DotPattern implements MyPattern {
+class DotPattern extends MyPattern {
     @Override
     public int length() {
-        return 1;
+        return CONST_DOT.length(); 
     }
 }
 
-class AsteriskPattern implements MyPattern {
+class AsteriskPattern extends MyPattern {
+    private String letter;
+
+    public AsteriskPattern(String let) {
+        letter = (let == null)?"":let;
+    }
+
     @Override
     public int length() {
-        return 1;
+        return letter.length() + CONST_ASTERISK.length();
     }
 }
