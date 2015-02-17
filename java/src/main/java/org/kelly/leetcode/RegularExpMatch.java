@@ -18,13 +18,14 @@ import org.kelly.leetcode.exception.InvalidInputException;
  * @author liuniu
  */
 public class RegularExpMatch {
-    private final static String CONST_DOT = ".";
-    private final static String CONST_ASTERISK = "*";
+    private static final String CONST_DOT = ".";
+    private static final String CONST_ASTERISK = "*";
+
+    private static RegularExpMatch instance = new RegularExpMatch();
 
     private RegularExpMatch() {
     }
 
-    private static RegularExpMatch instance = new RegularExpMatch();
     public static RegularExpMatch getInstance() {
         return instance;
     }
@@ -38,11 +39,6 @@ public class RegularExpMatch {
         if(str == null || str.isEmpty()) {
             throw new InvalidInputException("input string cannot be empty!");
         }
-
-
-        if(str.indexOf("*") >= 0) {
-            throw new InvalidInputException("input string cannot contain '*'");
-        }
     }
 
     private void assertInputRegex(String regex) {
@@ -50,15 +46,15 @@ public class RegularExpMatch {
             throw new InvalidInputException("input regex cannot be empty!");
         }
 
-        if(regex.startsWith("*")) {
-            throw new InvalidInputException("* cannot be the first letter of regex!");
-        }
-
         if(regex.indexOf("**") >= 0) {
             throw new InvalidInputException("** cannot be in the regex!");
         }
     }
 
+    /*
+     * the preferred run time is O(m+n)
+     * m, n is the lenth of input str and regex
+     */
     public boolean isMatch(String str, String regex) {
         assertInput(str, regex);
 
@@ -90,6 +86,7 @@ public class RegularExpMatch {
             myPatterns.add(nextPattern);
 
             if(nextPattern.length() == leftRegex.length()) {
+                // the leftRegex has been used up, no left
                 break;
             }
 
@@ -102,6 +99,7 @@ public class RegularExpMatch {
     private MyPattern getFirstPattern(List<String> targetPatterns, String regex) {
         int index = indexOf(targetPatterns, regex);
         if(index < 0) {
+            // no any special letter in the regex, so it should be a normal string
             return new SimplePattern(regex);
         }
         else if(index == 0) {
@@ -113,20 +111,34 @@ public class RegularExpMatch {
             }
         }
         else {
-            if(regex.indexOf(CONST_DOT) == index) { 
+            if(regex.indexOf(CONST_DOT) == index) {
+                // there has at least 1 normal letter before the first dot, 
+                // so generate the normal string as simplePattern first 
                 return new SimplePattern(regex.substring(0, index));
             }
             else {// it must be case that regex.indexOf(CONST_ASTERISK) == index)
                 if(index == 1) {
+                    // there is only one letter before the first asterisk
+                    // so this letter plus asterisk will be grouped as the AsteriskPattern
                     return new AsteriskPattern(regex.substring(0, 1).charAt(0));
                 }
                 else {// index > 1
+                    // there has at least 2 letters before the first asterisk
+                    // so generate the normal string as simplePattern first, without the nearest one to 
+                    // asterisk 
                     return new SimplePattern(regex.substring(0, index - 1));
                 }
             }
         }
     }
 
+    /*
+     * this is an enhanced version of String.indexOf()
+     * which is index of a List<String>, not one string
+     * @return    return value >= 0 means at least one String in toFinds was founded out in str
+     *            the most left one's index would be returned
+     *            return value == -1, means didn't find anything
+     */
     private int indexOf(List<String> toFinds, String str) {
         if(toFinds == null || str == null) {
             return -1;
@@ -152,14 +164,35 @@ public class RegularExpMatch {
 }
 
 abstract class MyPattern {
-    protected final static String CONST_DOT = ".";
-    protected final static String CONST_ASTERISK = "*";
+    protected static final String CONST_DOT = ".";
+    protected static final String CONST_ASTERISK = "*";
 
-    abstract public int length();
+    public abstract int length();
 
-    abstract public String matchHeadAndCut(String str);
+    /*
+     * use current pattern to match the input str,
+     * no need to match the whole str, only part of str from left beginning is enough
+     * then the matched part will be cut, return the left part
+     *
+     * for example, with SimplePattern("abc")
+     * for input str = "abcdefg", the most left part "abc" can be matched, the left side "defg" will be returned
+     *
+     * another example, with DotPattern
+     * for input str = "abcdefg", the most left part "a" can be matched, the left side "bcdefg" will be returned
+     * 
+     * if the return value is null, that means the input str can not match current Pattern
+     * for example, with SimplePattern("abc") 
+     * for input str = "dabcdefg", no any most left part can be matched, it will return null
+     *
+     * this method should be implemented by sub class for different type of match requirement
+     */
+    public abstract String matchHeadAndCut(String str);
 }
 
+/**
+ * the simplest pattern which has no any special letter, no any special
+ * meaning for each letter
+ */
 class SimplePattern extends MyPattern {
     private String string;
 
@@ -178,10 +211,13 @@ class SimplePattern extends MyPattern {
 
     @Override
     public String matchHeadAndCut(String str) {
-        return (string.startsWith(str))?string.substring(str.length()):null;
+        return (str.startsWith(string))?str.substring(this.length()):null;
     }
 }
 
+/**
+ * matches any single char, only care the first letter of the input str 
+ */
 class DotPattern extends MyPattern {
     @Override
     public int length() {
@@ -194,6 +230,9 @@ class DotPattern extends MyPattern {
     }
 }
 
+/**
+ * matches zero or more of the preceding letter before '*' 
+ */
 class AsteriskPattern extends MyPattern {
     private char letter;
 
@@ -209,6 +248,7 @@ class AsteriskPattern extends MyPattern {
     @Override
     public String matchHeadAndCut(String str) {
         if(!str.startsWith(String.valueOf(letter))) {
+            // zero preceding letter is also matched
             return str;
         }
 
@@ -224,6 +264,11 @@ class AsteriskPattern extends MyPattern {
     }
 }
 
+/**
+ * a special type of '*', which has no preceding letter
+ * for this type, it match zero or any number of same letter
+ * no matter what the letter is
+ */
 class AsteriskAnyLetterPattern extends MyPattern {
     public AsteriskAnyLetterPattern() {
     }

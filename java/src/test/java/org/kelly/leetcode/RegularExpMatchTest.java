@@ -56,6 +56,9 @@ public class RegularExpMatchTest
         isMatch = RegularExpMatch.getInstance().isMatch("aab", "c*a*b");
         assertTrue(isMatch);
 
+        isMatch = RegularExpMatch.getInstance().isMatch("abcde12344457212xyyyy", "abcd.1234*57212.*");
+        assertTrue(isMatch);
+
         System.out.println("regular expression match passed!");
     }
 }
