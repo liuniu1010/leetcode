@@ -25,17 +25,29 @@ public class RegularExpMatch {
     }
 
     private static RegularExpMatch instance = new RegularExpMatch();
-    private static RegularExpMatch getInstance() {
+    public static RegularExpMatch getInstance() {
         return instance;
     }
 
     private void assertInput(String str, String regex) {
+        assertInputString(str);
+        assertInputRegex(regex);
+    }
+
+    private void assertInputString(String str) {
         if(str == null || str.isEmpty()) {
-            throw new InvalidInputException("input params cannot be empty!");
+            throw new InvalidInputException("input string cannot be empty!");
         }
 
-        if(regex == null || str.isEmpty()) {
-            throw new InvalidInputException("input params cannot be empty!");
+
+        if(str.indexOf("*") >= 0) {
+            throw new InvalidInputException("input string cannot contain '*'");
+        }
+    }
+
+    private void assertInputRegex(String regex) {
+        if(regex == null || regex.isEmpty()) {
+            throw new InvalidInputException("input regex cannot be empty!");
         }
 
         if(regex.startsWith("*")) {
@@ -45,17 +57,21 @@ public class RegularExpMatch {
         if(regex.indexOf("**") >= 0) {
             throw new InvalidInputException("** cannot be in the regex!");
         }
-
-        if(regex.indexOf(".*") >= 0) {
-            throw new InvalidInputException(".* cannot be in the regex!");
-        }
     }
 
     public boolean isMatch(String str, String regex) {
         assertInput(str, regex);
 
-        // to be implemented
-        return false;
+        List<MyPattern> myPatterns = compile(regex);
+        String leftString = str;
+        for(MyPattern myPattern: myPatterns) {
+            leftString = myPattern.matchHeadAndCut(leftString);
+            if(leftString == null) {
+                return false;
+            }
+        }
+
+        return (leftString.length() == 0)?true:false;
     }
 
     private List<MyPattern> compile(String regex) {
@@ -70,7 +86,7 @@ public class RegularExpMatch {
                 break;
             }
 
-            MyPattern nextPattern = getNextPattern(targetPatterns, leftRegex);
+            MyPattern nextPattern = getFirstPattern(targetPatterns, leftRegex);
             myPatterns.add(nextPattern);
 
             if(nextPattern.length() == leftRegex.length()) {
@@ -83,24 +99,29 @@ public class RegularExpMatch {
         return myPatterns;
     }
 
-    private MyPattern getNextPattern(List<String> targetPatterns, String leftRegex) {
-        int index = indexOf(targetPatterns, leftRegex);
+    private MyPattern getFirstPattern(List<String> targetPatterns, String regex) {
+        int index = indexOf(targetPatterns, regex);
         if(index < 0) {
-            return new SimplePattern(leftRegex);
+            return new SimplePattern(regex);
         }
-        else if(index == 0) { // it must be startsWith '.', if it is startsWith '*", there must be some logic error in somewhere
-            return new DotPattern();
+        else if(index == 0) {
+            if(regex.startsWith(".")) { 
+                return new DotPattern();
+            }
+            else { // startsWith '*'
+                return new AsteriskAnyLetterPattern();
+            }
         }
         else {
-            if(leftRegex.indexOf(CONST_DOT) == index) { 
-                return new SimplePattern(leftRegex.substring(0, index));
+            if(regex.indexOf(CONST_DOT) == index) { 
+                return new SimplePattern(regex.substring(0, index));
             }
-            else {// it must be case that leftRegex.indexOf(CONST_ASTERISK) == index)
+            else {// it must be case that regex.indexOf(CONST_ASTERISK) == index)
                 if(index == 1) {
-                    return new AsteriskPattern(leftRegex.substring(0, 1));
+                    return new AsteriskPattern(regex.substring(0, 1).charAt(0));
                 }
                 else {// index > 1
-                    return new SimplePattern(leftRegex.substring(0, index - 1));
+                    return new SimplePattern(regex.substring(0, index - 1));
                 }
             }
         }
@@ -135,6 +156,8 @@ abstract class MyPattern {
     protected final static String CONST_ASTERISK = "*";
 
     abstract public int length();
+
+    abstract public String matchHeadAndCut(String str);
 }
 
 class SimplePattern extends MyPattern {
@@ -152,6 +175,11 @@ class SimplePattern extends MyPattern {
     public int length() {
         return string.length();
     }
+
+    @Override
+    public String matchHeadAndCut(String str) {
+        return (string.startsWith(str))?string.substring(str.length()):null;
+    }
 }
 
 class DotPattern extends MyPattern {
@@ -159,17 +187,67 @@ class DotPattern extends MyPattern {
     public int length() {
         return CONST_DOT.length(); 
     }
+
+    @Override
+    public String matchHeadAndCut(String str) {
+        return (str.isEmpty())?null:str.substring(length());
+    }
 }
 
 class AsteriskPattern extends MyPattern {
-    private String letter;
+    private char letter;
 
-    public AsteriskPattern(String let) {
-        letter = (let == null)?"":let;
+    public AsteriskPattern(char let) {
+        letter = let;
     }
 
     @Override
     public int length() {
-        return letter.length() + CONST_ASTERISK.length();
+        return CONST_ASTERISK.length() + 1;
+    }
+
+    @Override
+    public String matchHeadAndCut(String str) {
+        if(!str.startsWith(String.valueOf(letter))) {
+            return str;
+        }
+
+        String head = "";
+        while(true) {
+            head += String.valueOf(letter);
+            if(!str.startsWith(head)) {
+                break;
+            }
+        }
+
+        return str.substring(head.length() - 1);
+    }
+}
+
+class AsteriskAnyLetterPattern extends MyPattern {
+    public AsteriskAnyLetterPattern() {
+    }
+
+    @Override 
+    public int length() {
+        return CONST_ASTERISK.length();
+    }
+
+    @Override
+    public String matchHeadAndCut(String str) {
+        if(str.isEmpty()) {
+            return str;
+        }
+
+        String head = "";
+        String sLetter = str.substring(0, 1);
+        while(true) {
+            head += sLetter;
+            if(!str.startsWith(head)) {
+                break;
+            }
+        }
+
+        return str.substring(head.length() - 1);
     }
 }
