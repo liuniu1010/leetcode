@@ -60,10 +60,10 @@ public class ContainerWithMostWater {
 
         while(pointLeft.getX() < pointRight.getX()) {
             if(pointLeft.getY() < pointRight.getY()) {
-                pointLeft.moveRight(1);
+                pointLeft = new Point(pointLeft.getX() + 1, heights[pointLeft.getX() + 1]);
             }
             else {
-                pointRight.moveLeft(1);
+                pointRight = new Point(pointRight.getX() - 1, heights[pointRight.getX() - 1]);
             }
 
             maxCapacity = Math.max(maxCapacity, new PointPair(pointLeft, pointRight).getCapacity());
@@ -106,13 +106,6 @@ class Point {
         return y;
     }
 
-    public void moveLeft(int step) {
-        x -= step;
-    }
-
-    public void moveRight(int step) {
-        x += step;
-    }
 
     @Override
     public boolean equals(Object obj) {
@@ -126,6 +119,11 @@ class Point {
 
         Point point = (Point)obj;
         return (x == point.getX()) && (y == point.getY());
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }
 
@@ -162,6 +160,11 @@ class PointPair {
 
         PointPair pointPair = (PointPair)obj;
         return p1.equals(pointPair.getP1()) && p2.equals(pointPair.getP2());
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 
     public int getCapacity() {

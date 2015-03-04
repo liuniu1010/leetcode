@@ -48,13 +48,14 @@ public class MedianOfTwoSortedArraysTest
             number = number + random.nextInt(11);
             array2.add(number);
         }
-        
+
+        MedianOfTwoSortedArrays instance = MedianOfTwoSortedArrays.getInstance();        
         long beginMillis = System.currentTimeMillis();
-        Median medianOfSimple = MedianOfTwoSortedArrays.getInstance().getMedianWithSimpleSolution(array1, array2);
+        Median medianOfSimple = instance.getMedianWithSimpleSolution(array1, array2);
         long consumeMillisOfSimple = System.currentTimeMillis() - beginMillis;
         
         beginMillis = System.currentTimeMillis();
-        Median medianOfQuick = MedianOfTwoSortedArrays.getInstance().getMedianWithQuickSolution(array1, array2);
+        Median medianOfQuick = instance.getMedianWithQuickSolution(array1, array2);
         long consumeMillisOfQuick = System.currentTimeMillis() - beginMillis;
         System.out.println("medianSimple = " + medianOfSimple + ", consumeMillis = " + consumeMillisOfSimple);
         System.out.println("medianQuick = " + medianOfQuick + ", consumeMillis = " + consumeMillisOfQuick);
