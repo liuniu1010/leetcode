@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Comparator;
 import org.kelly.leetcode.exception.InvalidInputException;
 
 /***
@@ -56,7 +57,10 @@ public class ThreeSum {
                     num3 = numbers.get(k);
 
                     if(num1 + num2 + num3 == 0) {
-                        triplets.add(new Triplet(num1, num2, num3));
+                        Triplet triplet = new Triplet(num1, num2, num3);
+                        if(!triplets.contains(triplet)) {
+                            triplets.add(triplet);
+                        }
                     }
                 }
             }
@@ -93,15 +97,10 @@ public class ThreeSum {
         List<Triplet> triplets = new ArrayList<Triplet>();
         for(int i = 0;i < numbers.size() - 1;i++) {
             num1 = numbers.get(i);
-            for(int j = 0;j < numbers.size();j++) {
+            for(int j = i + 1;j < numbers.size();j++) {
                 num2 = numbers.get(j);
 
                 preferredNum3 = -(num1 + num2);
-                if(preferredNum3 < num2) {
-                    // num1, num2, preferredNum3 should be ordered numbers, that means
-                    // num1 <= num2 <= preferredNum3
-                    continue;
-                }
                 if(numIndexMap.containsKey(preferredNum3)) {
                     // we should check for cases that num3 is equal to num1 or num2
                     List<Integer> indexes = numIndexMap.get(preferredNum3);
@@ -113,9 +112,12 @@ public class ThreeSum {
                             break;
                         }
                     }
-
+                    
                     if(befound) {
-                        triplets.add(new Triplet(num1, num2, preferredNum3));
+                        Triplet triplet = new Triplet(num1, num2, preferredNum3);
+                        if(!triplets.contains(triplet)) {
+                            triplets.add(triplet);
+                        }
                     }
                 }
             }
@@ -131,8 +133,59 @@ class Triplet {
     private int num3;
 
     public Triplet(int number1, int number2, int number3) {
-        num1 = number1;
-        num2 = number2;
-        num3 = number3;
+        // the input numbers might not be sorted, so 
+        // here we sorted it first
+        List<Integer> array = new ArrayList<Integer>();
+        array.add(number1);
+        array.add(number2);
+        array.add(number3);
+
+        array.sort(new Comparator<Integer>() {
+            public int compare(Integer number1, Integer number2) {
+                return number1.compareTo(number2);
+            }
+        });
+
+        // then set the sorted numbers to member variables to make
+        // sure that num1 <= num2 <= num3
+        num1 = array.get(0);
+        num2 = array.get(1);
+        num3 = array.get(2);
+    }
+
+    public int getNum1() {
+        return num1;
+    }
+
+    public int getNum2() {
+        return num2;
+    }
+
+    public int getNum3() {
+        return num3;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null) {
+            return false;
+        }
+
+        if(!(obj instanceof Triplet)) {
+            return false;
+        }
+
+        Triplet triplet = (Triplet)obj;
+        return (num1 == triplet.getNum1()) && (num2 == triplet.getNum2()) && (num3 == triplet.getNum3());
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "[" + num1 + ", " + num2 + ", " + num3 + "]";
     }
 }
