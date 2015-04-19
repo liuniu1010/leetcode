@@ -179,6 +179,10 @@ class Triplet {
         return (num1 == triplet.getNum1()) && (num2 == triplet.getNum2()) && (num3 == triplet.getNum3());
     }
 
+    public int sum() {
+        return num1 + num2 + num3;
+    }
+
     @Override
     public int hashCode() {
         return super.hashCode();
