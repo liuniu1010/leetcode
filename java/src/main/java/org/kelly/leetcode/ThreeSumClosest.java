@@ -45,26 +45,23 @@ public class ThreeSumClosest {
         assertInput(numbers);
 
         Triplet tripletClosest = null;
-        int distanceClosest = -1;
+        // 3 layers loop to check all possible combinations
         for(int i = 0;i < numbers.size() - 2;i++) {
             for(int j = i + 1;j < numbers.size() - 1;j++) {
                 for(int k = j + 1;k < numbers.size();k++) {
-                    Triplet triplet = new Triplet(numbers.get(i), numbers.get(j), numbers.get(k));
-                    int currentDistance = Math.abs((triplet.sum()) - target);
+                    Triplet currentTriplet = new Triplet(numbers.get(i), numbers.get(j), numbers.get(k));
+                    int currentDistance = Math.abs(currentTriplet.sum() - target);
                     if(currentDistance == 0) {
-                        tripletClosest = triplet;
-                        distanceClosest = 0;
-                        break;
+                        tripletClosest = currentTriplet;
+                        return tripletClosest;
                     } 
-                    else if(distanceClosest < 0) {
-                        // distanceClosest < 0  means distanceClosest has not been initialized
-                        tripletClosest = triplet;
-                        distanceClosest = currentDistance;
+                    else if(tripletClosest == null) {
+                        tripletClosest = currentTriplet;
                     } 
                     else {
+                        int distanceClosest = Math.abs(tripletClosest.sum() - target);
                         if(currentDistance < distanceClosest) {
-                            tripletClosest = triplet;
-                            distanceClosest = currentDistance;
+                            tripletClosest = currentTriplet;
                         }
                     }
                 }
@@ -88,15 +85,39 @@ public class ThreeSumClosest {
         });
 
         Triplet tripletClosest = null;
+        // 2 layers loop with recursive call to locate the third number's location
+        // the preferred running time should be O(n^2*log(n))
         for(int i = 0;i < numbers.size() - 2;i++) {
+            if(tripletClosest != null) {
+                int currentClosestDistance = Math.abs(tripletClosest.sum() - target);
+                int leastDeltaFromNowOn = numbers.get(i) + numbers.get(i + 1) + numbers.get(i + 2) - target;
+                if(leastDeltaFromNowOn >= currentClosestDistance) {
+                    // because the numbers have been sorted, all the left combination's
+                    // Delta will be greater than or equal to leastDeltaFromNowOn
+                    // so there is no need to loop with all left indexes of i,j
+                    return tripletClosest;
+                }
+            }
+
             for(int j = i + 1;j < numbers.size() - 1;j++) {
+                if(tripletClosest != null) {
+                    int currentClosestDistance = Math.abs(tripletClosest.sum() - target);
+                    int leastDeltaFromNowOn = numbers.get(i) + numbers.get(j) + numbers.get(j + 1) - target;
+                    if(leastDeltaFromNowOn >= currentClosestDistance) {
+                        // because the numbers have been sorted, all the left combination's 
+                        // delta will be greater than or equal to leastDeltaFromNowOn
+                        // so there is no need to loop with left indexes of j
+                        break;
+                    }
+                }
+
                 int leftEdge = j + 1;
                 int rightEdge = numbers.size() - 1;
 
                 tripletClosest = getClosestTripletWithFixedNumber1AndNumber2(i, j, target, numbers, leftEdge, rightEdge, tripletClosest);
                 int distanceClosest = Math.abs(tripletClosest.sum() - target);
                 if(distanceClosest == 0) {
-                    break;
+                    return tripletClosest;
                 }
             }
         }
@@ -104,17 +125,17 @@ public class ThreeSumClosest {
         return tripletClosest;
     }
 
-    private Triplet getClosestTripletWithFixedNumber1AndNumber2(int number1, int number2, int target, List<Integer> numbers, int leftEdge, int rightEdge, Triplet previousTripletClosest) {
+    private Triplet getClosestTripletWithFixedNumber1AndNumber2(int number1, int number2, int target, List<Integer> numbers, int leftEdge, int rightEdge, Triplet tripletClosest) {
         if(leftEdge == rightEdge) {
             Triplet currentTriplet = new Triplet(number1, number2, numbers.get(leftEdge));
-            if(previousTripletClosest == null) {
+            if(tripletClosest == null) {
                 return currentTriplet;
             }
             else {
-                int previousDistanceClosest = Math.abs(previousTripletClosest.sum() - target);
+                int distanceClosest = Math.abs(tripletClosest.sum() - target);
                 int currentDistance = Math.abs(currentTriplet.sum() - target);
 
-                return (currentDistance < previousDistanceClosest)?currentTriplet:previousTripletClosest;
+                return (currentDistance < distanceClosest)?currentTriplet:tripletClosest;
             }
         }
 
@@ -125,14 +146,14 @@ public class ThreeSumClosest {
         if(currentDelta == 0) {
             return currentTriplet;
         } 
-        else if(previousTripletClosest == null) {
+        else if(tripletClosest == null) {
             // it's the first call into this method
-            previousTripletClosest = currentTriplet;
+            tripletClosest = currentTriplet;
 
             int newLeftEdge;
             int newRightEdge;
             if(currentDelta < 0) {
-                newLeftEdge = middle;
+                newLeftEdge = middle + 1;
                 newRightEdge = rightEdge;
             }
             else {
@@ -140,22 +161,22 @@ public class ThreeSumClosest {
                 newRightEdge = middle;
             }
 
-            return getClosestTripletWithFixedNumber1AndNumber2(number1, number2, target, numbers, newLeftEdge, newRightEdge, previousTripletClosest);
+            return getClosestTripletWithFixedNumber1AndNumber2(number1, number2, target, numbers, newLeftEdge, newRightEdge, tripletClosest);
         }
         else {
-            int previousDeltaClosest = previousTripletClosest.sum() - target;
-            int previousDistanceClosest = Math.abs(previousDeltaClosest);
+            int deltaClosest = tripletClosest.sum() - target;
+            int distanceClosest = Math.abs(deltaClosest);
             int currentDistance = Math.abs(currentDelta);
 
             int newLeftEdge;
             int newRightEdge;
 
-            if(currentDistance < previousDistanceClosest) {
-                previousTripletClosest = currentTriplet;
+            if(currentDistance < distanceClosest) {
+                tripletClosest = currentTriplet;
             }
 
             if(currentDelta < 0) {
-                newLeftEdge = middle;
+                newLeftEdge = middle + 1;
                 newRightEdge = rightEdge;
             }
             else {
@@ -163,7 +184,7 @@ public class ThreeSumClosest {
                 newRightEdge = middle;
             }
 
-            return getClosestTripletWithFixedNumber1AndNumber2(number1, number2, target, numbers, newLeftEdge, newRightEdge, previousTripletClosest);
+            return getClosestTripletWithFixedNumber1AndNumber2(number1, number2, target, numbers, newLeftEdge, newRightEdge, tripletClosest);
         } 
     }
 }
