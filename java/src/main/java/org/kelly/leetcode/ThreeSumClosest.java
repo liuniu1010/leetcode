@@ -114,7 +114,7 @@ public class ThreeSumClosest {
                 int leftEdge = j + 1;
                 int rightEdge = numbers.size() - 1;
 
-                tripletClosest = getClosestTripletWithFixedNumber1AndNumber2(i, j, target, numbers, leftEdge, rightEdge, tripletClosest);
+                tripletClosest = getClosestTripletWithFixedNumber1AndNumber2(numbers.get(i), numbers.get(j), target, numbers, leftEdge, rightEdge, tripletClosest);
                 int distanceClosest = Math.abs(tripletClosest.sum() - target);
                 if(distanceClosest == 0) {
                     return tripletClosest;
@@ -126,8 +126,19 @@ public class ThreeSumClosest {
     }
 
     private Triplet getClosestTripletWithFixedNumber1AndNumber2(int number1, int number2, int target, List<Integer> numbers, int leftEdge, int rightEdge, Triplet tripletClosest) {
-        if(leftEdge == rightEdge) {
-            Triplet currentTriplet = new Triplet(number1, number2, numbers.get(leftEdge));
+        if(number1 + number2 + numbers.get(leftEdge) - target >= 0
+            || number1 + number2 + numbers.get(rightEdge) - target <= 0) {
+            // in this case, no need to search recursively in the method.
+            // the closest Triplet is at the edge
+            // case that leftEdge = rightEdge will also be included here
+            Triplet currentTriplet;
+            if(number1 + number2 + numbers.get(leftEdge) - target >= 0) {
+                currentTriplet = new Triplet(number1, number2, numbers.get(leftEdge));
+            }
+            else {
+                currentTriplet = new Triplet(number1, number2, numbers.get(rightEdge));
+            }
+            
             if(tripletClosest == null) {
                 return currentTriplet;
             }
