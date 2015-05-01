@@ -36,6 +36,7 @@ public class NQueensTest
         int N = 8;
         List<List<CoordinateTwo>> solvedNQueens = NQueens.getInstance().solveNQueens(N);
         NQueens.getInstance().printNQueens(solvedNQueens);
-        System.out.println("solvedNQueens.size = " + solvedNQueens.size());
+        System.out.println("There are " + solvedNQueens.size() + " solutions");
+        
     }
 }

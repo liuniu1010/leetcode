@@ -8,7 +8,7 @@ package org.kelly.leetcode;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Comparator;
-
+import org.kelly.leetcode.util.Triplet;
 import org.kelly.leetcode.exception.InvalidInputException;
 
 /***

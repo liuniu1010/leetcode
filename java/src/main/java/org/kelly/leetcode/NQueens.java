@@ -100,20 +100,23 @@ public class NQueens {
     public void printNQueens(List<List<CoordinateTwo>> solvedResults) {
         System.out.println("\n");
         for(List<CoordinateTwo> solvedResult: solvedResults) {
-            System.out.println("****************************************");
-            for(CoordinateTwo coord: solvedResult) {
-                String line = "";
-                for(int i = 0;i < solvedResult.size();i++) {
-                    if(coord.getX() == i) {
-                        line += " Q ";
-                    }
-                    else {
-                        line += " + ";
-                    }
+            printNQueen(solvedResult);
+        }
+    }
+
+    public void printNQueen(List<CoordinateTwo> solvedResult) {
+        System.out.println("****************************************");
+        for(CoordinateTwo coord: solvedResult) {
+            String line = "";
+            for(int i = 0;i < solvedResult.size();i++) {
+                if(coord.getX() == i) {
+                    line += " Q ";
                 }
-                System.out.println(line);
-                System.out.println("\n");   
+                else {
+                    line += " + ";
+                }
             }
+            System.out.println(line);
         }
     }
 }
