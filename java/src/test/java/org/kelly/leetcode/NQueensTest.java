@@ -2,6 +2,7 @@ package org.kelly.leetcode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -35,8 +36,12 @@ public class NQueensTest
     {
         int N = 8;
         List<List<CoordinateTwo>> solvedNQueens = NQueens.getInstance().solveNQueens(N);
-        NQueens.getInstance().printNQueens(solvedNQueens);
         System.out.println("There are " + solvedNQueens.size() + " solutions");
-        
+        if(solvedNQueens.size() > 0) {
+            System.out.println("Random select one to print here");
+            Random random = new Random();
+            int randomIndex = random.nextInt(solvedNQueens.size());
+            NQueens.getInstance().printNQueen(solvedNQueens.get(randomIndex));
+        }
     }
 }

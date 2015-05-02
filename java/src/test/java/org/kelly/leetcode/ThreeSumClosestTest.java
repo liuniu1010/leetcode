@@ -38,8 +38,8 @@ public class ThreeSumClosestTest
     {
         // generate test numbers randomly
         List<Integer> numbers = new ArrayList<Integer>();
-        int minNumber = -500000;
-        int maxNumber = 500000;
+        int minNumber = -10000;
+        int maxNumber = 10000;
 
         int number = minNumber;
         Random random = new Random();
@@ -48,7 +48,7 @@ public class ThreeSumClosestTest
             numbers.add(number);
         }
 
-        int target = random.nextInt(19997);
+        int target = random.nextInt(1997);
 
         ThreeSumClosest instance = ThreeSumClosest.getInstance();
 

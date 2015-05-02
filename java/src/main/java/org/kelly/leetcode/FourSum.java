@@ -94,6 +94,7 @@ public class FourSum {
                 else {
                     List<Doublet> doublets = new ArrayList<Doublet>();
                     doublets.add(doublet);
+                    numIndexMap.put(num, doublets);
                 }
             }
         }
@@ -123,7 +124,7 @@ public class FourSum {
                     }
 
                     if(doubletToBeFound != null) {
-                        Quadruplet quadruplet = new Quadruplet(i, j, doubletToBeFound.getNum1(), doubletToBeFound.getNum2());
+                        Quadruplet quadruplet = new Quadruplet(numbers.get(i), numbers.get(j), numbers.get(doubletToBeFound.getNum1()), numbers.get(doubletToBeFound.getNum2()));
                         if(!quadruplets.contains(quadruplet)) {
                             quadruplets.add(quadruplet);
                         }
