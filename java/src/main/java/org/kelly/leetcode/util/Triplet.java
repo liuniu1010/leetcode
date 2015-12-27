@@ -3,6 +3,7 @@ package org.kelly.leetcode.util;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Collections;
 
 public class Triplet {
     private int num1;
@@ -17,7 +18,7 @@ public class Triplet {
         array.add(number2);
         array.add(number3);
 
-        array.sort(new Comparator<Integer>() {
+        Collections.sort(array, new Comparator<Integer>() {
             public int compare(Integer number1, Integer number2) {
                 return number1.compareTo(number2);
             }

@@ -7,6 +7,7 @@ package org.kelly.leetcode;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Collections;
 import java.util.List;
 
 import org.kelly.leetcode.exception.InvalidInputException;
@@ -272,7 +273,7 @@ public class MedianOfTwoSortedArrays {
      * but for the quick solution method. it only use this method for limit sized such as 3,4 or 5.
      */
     private Median getMedianWithUnsortedArray(List<Integer> array) {
-        array.sort(new Comparator<Integer>() {
+        Collections.sort(array, new Comparator<Integer>() {
             public int compare(Integer number1, Integer number2) {
                 return number1.compareTo(number2);
             }

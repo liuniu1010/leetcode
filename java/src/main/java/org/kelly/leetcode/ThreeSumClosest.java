@@ -8,6 +8,7 @@ package org.kelly.leetcode;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Collections;
 import org.kelly.leetcode.util.Triplet;
 import org.kelly.leetcode.exception.InvalidInputException;
 
@@ -78,7 +79,7 @@ public class ThreeSumClosest {
         assertInput(numbers);
 
         // sort the numbers first
-        numbers.sort(new Comparator<Integer>() {
+        Collections.sort(numbers, new Comparator<Integer>() {
             public int compare(Integer number1, Integer number2) {
                 return number1.compareTo(number2);
             }
