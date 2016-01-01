@@ -11,29 +11,25 @@ import java.util.Random;
  * Unit test for simple App.
  */
 public class ContainerWithMostWaterTest
-    extends TestCase
-{
+    extends TestCase {
     /**
      * Create the test case
      *
      * @param testName name of the test case
      */
-    public ContainerWithMostWaterTest( String testName )
-    {
+    public ContainerWithMostWaterTest( String testName ) {
         super( testName );
     }
 
     /**
      * @return the suite of tests being tested
      */
-    public static Test suite()
-    {
+    public static Test suite() {
         return new TestSuite( ContainerWithMostWaterTest.class );
     }
 
 
-    public void testMostWater()
-    {
+    public void testMostWater() {
         // generate random points
         int[] heights = new int[10000];
         Random random = new Random();

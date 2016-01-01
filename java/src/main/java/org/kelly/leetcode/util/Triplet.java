@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Collections;
 
-public class Triplet {
+public class Triplet implements Comparable<Triplet>{
     private int num1;
     private int num2;
     private int num3;
@@ -69,5 +69,19 @@ public class Triplet {
     @Override
     public String toString() {
         return "[" + num1 + ", " + num2 + ", " + num3 + "]";
+    }
+
+    public int compareTo(Triplet triplet) {
+        int compareOfnum = Integer.valueOf(num1).compareTo(triplet.getNum1());
+        if(compareOfnum != 0) {
+            return compareOfnum;
+        }
+        
+        compareOfnum = Integer.valueOf(num2).compareTo(triplet.getNum2());
+        if(compareOfnum != 0) {
+            return compareOfnum;
+        }
+        
+        return Integer.valueOf(num3).compareTo(triplet.getNum3());
     }
 }

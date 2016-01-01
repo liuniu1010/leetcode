@@ -12,28 +12,24 @@ import junit.framework.TestSuite;
  * Unit test
  */
 public class MedianOfTwoSortedArraysTest 
-    extends TestCase
-{
+    extends TestCase {
     /**
      * Create the test case
      *
      * @param testName name of the test case
      */
-    public MedianOfTwoSortedArraysTest( String testName )
-    {
+    public MedianOfTwoSortedArraysTest( String testName ) {
         super( testName );
     }
 
     /**
      * @return the suite of tests being tested
      */
-    public static Test suite()
-    {
+    public static Test suite() {
         return new TestSuite( MedianOfTwoSortedArraysTest.class );
     }
 
-    public void testMediansOfTwoSortedArrays()
-    {
+    public void testMediansOfTwoSortedArrays() {
         List<Integer> array1 = new ArrayList<Integer>();
         int number = 1;
         Random random = new Random();

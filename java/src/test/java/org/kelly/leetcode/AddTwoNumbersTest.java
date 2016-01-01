@@ -11,29 +11,25 @@ import java.util.Random;
  * Unit test for simple App.
  */
 public class AddTwoNumbersTest 
-    extends TestCase
-{
+    extends TestCase {
     /**
      * Create the test case
      *
      * @param testName name of the test case
      */
-    public AddTwoNumbersTest( String testName )
-    {
+    public AddTwoNumbersTest( String testName ) {
         super( testName );
     }
 
     /**
      * @return the suite of tests being tested
      */
-    public static Test suite()
-    {
+    public static Test suite() {
         return new TestSuite( AddTwoNumbersTest.class );
     }
 
 
-    public void testAddTwoNumbers()
-    {
+    public void testAddTwoNumbers() {
         Random random = new Random();
 
         int number1 = random.nextInt(1000000);

@@ -11,16 +11,14 @@ public class LengthOfLongestUnrepeatSubstringTest
      *
      * @param testName name of the test case
      */
-    public LengthOfLongestUnrepeatSubstringTest( String testName )
-    {
+    public LengthOfLongestUnrepeatSubstringTest( String testName ) {
         super( testName );
     }
 
     /**
      * @return the suite of tests being tested
      */
-    public static Test suite()
-    {
+    public static Test suite() {
         return new TestSuite( LengthOfLongestUnrepeatSubstringTest.class );
     }
     

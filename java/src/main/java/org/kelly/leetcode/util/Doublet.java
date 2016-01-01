@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Collections;
 
-public class Doublet {
+public class Doublet implements Comparable<Doublet>{
     private int num1;
     private int num2;
 
@@ -62,5 +62,14 @@ public class Doublet {
     @Override
     public String toString() {
         return "[" + num1 + ", " + num2 + "]";
+    }
+
+    public int compareTo(Doublet doublet) {
+        int compareOfnum = Integer.valueOf(num1).compareTo(doublet.getNum1());
+        if(compareOfnum != 0) {
+            return compareOfnum;
+        }
+        
+        return Integer.valueOf(num2).compareTo(doublet.getNum2());
     }
 }

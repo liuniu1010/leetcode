@@ -12,28 +12,24 @@ import junit.framework.TestSuite;
  * Unit test for simple App.
  */
 public class NQueensTest 
-    extends TestCase
-{
+    extends TestCase {
     /**
      * Create the test case
      *
      * @param testName name of the test case
      */
-    public NQueensTest( String testName )
-    {
+    public NQueensTest( String testName ) {
         super( testName );
     }
 
     /**
      * @return the suite of tests being tested
      */
-    public static Test suite()
-    {
+    public static Test suite() {
         return new TestSuite( NQueensTest.class );
     }
 
-    public void testNQueens()
-    {
+    public void testNQueens() {
         int N = 8;
         List<List<CoordinateTwo>> solvedNQueens = NQueens.getInstance().solveNQueens(N);
         System.out.println("There are " + solvedNQueens.size() + " solutions");

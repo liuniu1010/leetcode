@@ -1,9 +1,13 @@
 package org.kelly.leetcode;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
+
 import org.kelly.leetcode.util.Triplet;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -12,28 +16,24 @@ import junit.framework.TestSuite;
  * Unit test for simple App.
  */
 public class ThreesumTest 
-    extends TestCase
-{
+    extends TestCase {
     /**
      * Create the test case
      *
      * @param testName name of the test case
      */
-    public ThreesumTest( String testName )
-    {
+    public ThreesumTest( String testName ) {
         super( testName );
     }
 
     /**
      * @return the suite of tests being tested
      */
-    public static Test suite()
-    {
+    public static Test suite() {
         return new TestSuite( ThreesumTest.class );
     }
 
-    public void testThreesum()
-    {
+    public void testThreesum() {
         // generate test numbers randomly
         List<Integer> numbers = new ArrayList<Integer>();
         int minNumber = -500000;
@@ -56,6 +56,19 @@ public class ThreesumTest
         List<Triplet> tripletsOfQuick = instance.threeSumWithQuickSolution(numbers);
         System.out.println("time consume with quick solution = " + (System.currentTimeMillis() - beginMillis) + " ms");
 
+        // sort the two triplets first to compare them
+        Collections.sort(tripletsOfSimple, new Comparator<Triplet>() {
+            public int compare(Triplet triplet1, Triplet triplet2) {
+                return triplet1.compareTo(triplet2);
+            }
+        });
+        
+        Collections.sort(tripletsOfQuick, new Comparator<Triplet>() {
+            public int compare(Triplet triplet1, Triplet triplet2) {
+                return triplet1.compareTo(triplet2);
+            }
+        });
+        
         String sTripletsOfSimple = triplets2String(tripletsOfSimple);
         String sTripletsOfQuick = triplets2String(tripletsOfQuick);
         System.out.println("tripletsOfSimple size = " + tripletsOfSimple.size());

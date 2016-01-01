@@ -9,28 +9,24 @@ import junit.framework.TestSuite;
  * Unit test for simple App.
  */
 public class GenerateParenthesesTest 
-    extends TestCase
-{
+    extends TestCase {
     /**
      * Create the test case
      *
      * @param testName name of the test case
      */
-    public GenerateParenthesesTest( String testName )
-    {
+    public GenerateParenthesesTest( String testName ) {
         super( testName );
     }
 
     /**
      * @return the suite of tests being tested
      */
-    public static Test suite()
-    {
+    public static Test suite() {
         return new TestSuite( GenerateParenthesesTest.class );
     }
 
-    public void testGenerateParentheses()
-    {
+    public void testGenerateParentheses() {
         GenerateParentheses instance = GenerateParentheses.getInstance();
         int n = 4;
         List<String> parentheses = instance.generateParentheses(n);

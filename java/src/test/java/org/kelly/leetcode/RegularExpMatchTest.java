@@ -11,29 +11,25 @@ import java.util.Random;
  * Unit test for simple App.
  */
 public class RegularExpMatchTest
-    extends TestCase
-{
+    extends TestCase {
     /**
      * Create the test case
      *
      * @param testName name of the test case
      */
-    public RegularExpMatchTest( String testName )
-    {
+    public RegularExpMatchTest( String testName ) {
         super( testName );
     }
 
     /**
      * @return the suite of tests being tested
      */
-    public static Test suite()
-    {
+    public static Test suite() {
         return new TestSuite( RegularExpMatchTest.class );
     }
 
 
-    public void testRegularExpMatch()
-    {
+    public void testRegularExpMatch() {
         boolean isMatch;
         isMatch = RegularExpMatch.getInstance().isMatch("aa", "a");
         assertFalse(isMatch);

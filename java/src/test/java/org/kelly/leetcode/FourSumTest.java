@@ -1,9 +1,13 @@
 package org.kelly.leetcode;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
+
 import org.kelly.leetcode.util.Quadruplet;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -12,28 +16,24 @@ import junit.framework.TestSuite;
  * Unit test for simple App.
  */
 public class FourSumTest 
-    extends TestCase
-{
+    extends TestCase {
     /**
      * Create the test case
      *
      * @param testName name of the test case
      */
-    public FourSumTest( String testName )
-    {
+    public FourSumTest( String testName ) {
         super( testName );
     }
 
     /**
      * @return the suite of tests being tested
      */
-    public static Test suite()
-    {
+    public static Test suite() {
         return new TestSuite( FourSumTest.class );
     }
 
-    public void testFourSum()
-    {
+    public void testFourSum() {
         // generate test numbers randomly
         List<Integer> numbers = new ArrayList<Integer>();
         int minNumber = -500000;
@@ -56,6 +56,19 @@ public class FourSumTest
         List<Quadruplet> quadrupletsOfQuick = instance.fourSumWithQuickSolution(numbers, 0);
         System.out.println("4 sum, time consume with quick solution = " + (System.currentTimeMillis() - beginMillis) + " ms");
 
+        // sort the two quadruplets first to compare them
+        Collections.sort(quadrupletsOfSimple, new Comparator<Quadruplet>() {
+            public int compare(Quadruplet quadruplet1, Quadruplet quadruplet2) {
+                return quadruplet1.compareTo(quadruplet2);
+            }
+        });
+        
+        Collections.sort(quadrupletsOfQuick, new Comparator<Quadruplet>() {
+            public int compare(Quadruplet quadruplet1, Quadruplet quadruplet2) {
+                return quadruplet1.compareTo(quadruplet2);
+            }
+        });
+        
         String sQuadrupletsOfSimple = quadruplets2String(quadrupletsOfSimple);
         String sQuadrupletsOfQuick = quadruplets2String(quadrupletsOfQuick);
         System.out.println("quadrupletsOfSimple.size = " + quadrupletsOfSimple.size());

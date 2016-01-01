@@ -14,28 +14,24 @@ import junit.framework.TestSuite;
  * Unit test for simple App.
  */
 public class ThreeSumClosestTest 
-    extends TestCase
-{
+    extends TestCase {
     /**
      * Create the test case
      *
      * @param testName name of the test case
      */
-    public ThreeSumClosestTest( String testName )
-    {
+    public ThreeSumClosestTest( String testName ) {
         super( testName );
     }
 
     /**
      * @return the suite of tests being tested
      */
-    public static Test suite()
-    {
+    public static Test suite() {
         return new TestSuite( ThreeSumClosestTest.class );
     }
 
-    public void testThreesumClosest()
-    {
+    public void testThreesumClosest() {
         // generate test numbers randomly
         List<Integer> numbers = new ArrayList<Integer>();
         int minNumber = -10000;

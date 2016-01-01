@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Collections;
 
-public class Quadruplet {
+public class Quadruplet implements Comparable<Quadruplet>{
     private int num1;
     private int num2;
     private int num3;
@@ -27,7 +27,7 @@ public class Quadruplet {
         });
 
         // then set the sorted numbers to member variables to make
-        // sure that num1 <= num2 <= num3
+        // sure that num1 <= num2 <= num3 <= num4
         num1 = array.get(0);
         num2 = array.get(1);
         num3 = array.get(2);
@@ -76,5 +76,24 @@ public class Quadruplet {
     @Override
     public String toString() {
         return "[" + num1 + ", " + num2 + ", " + num3 + ", " + num4 + "]";
+    }
+
+    public int compareTo(Quadruplet quadruplet) {
+        int compareOfnum = Integer.valueOf(num1).compareTo(quadruplet.getNum1());
+        if(compareOfnum != 0) {
+            return compareOfnum;
+        }
+        
+        compareOfnum = Integer.valueOf(num2).compareTo(quadruplet.getNum2());
+        if(compareOfnum != 0) {
+            return compareOfnum;
+        }
+        
+        compareOfnum = Integer.valueOf(num3).compareTo(quadruplet.getNum3());
+        if(compareOfnum != 0) {
+            return compareOfnum;
+        }
+        
+        return Integer.valueOf(num4).compareTo(quadruplet.getNum4());
     }
 }
