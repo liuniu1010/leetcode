@@ -33,11 +33,8 @@ public class NQueensTest
         int N = 8;
         List<List<CoordinateTwo>> solvedNQueens = NQueens.getInstance().solveNQueens(N);
         System.out.println("There are " + solvedNQueens.size() + " solutions");
-        if(solvedNQueens.size() > 0) {
-            System.out.println("Random select one to print here");
-            Random random = new Random();
-            int randomIndex = random.nextInt(solvedNQueens.size());
-            NQueens.getInstance().printNQueen(solvedNQueens.get(randomIndex));
+        for(List<CoordinateTwo> solvedNQueen: solvedNQueens) {
+            NQueens.getInstance().printNQueen(solvedNQueen);
         }
     }
 }
