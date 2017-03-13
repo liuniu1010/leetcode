@@ -1,6 +1,7 @@
 *.out
 *.o
 *.gch
+*.swp
 target/
 .classpath
 .project
